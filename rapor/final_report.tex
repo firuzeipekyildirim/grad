@@ -1,290 +1,265 @@
-% =========================
-% EMU405 Final Report Template (LaTeX)
-% Based on "GP FINAL Report format (updated).pdf"
-% =========================
+\documentclass[12pt]{article}
 
-\documentclass[12pt,a4paper]{article}
-
-% ---------- Packages ----------
 \usepackage[a4paper,margin=1in]{geometry}
-\usepackage{setspace}
-\usepackage{microtype}
-\usepackage{graphicx}
 \usepackage{amsmath,amssymb}
-\usepackage[hidelinks]{hyperref}
-\usepackage{caption}
-\usepackage{booktabs}
-\usepackage{longtable}
-\usepackage{url}        % \url{} komutu için
-\usepackage[hidelinks]{hyperref}  % linkleri düzgün basar (mümkünse en sona yakın)
-\usepackage{cite}       % IEEE tarzı [1–3] gibi sıkıştırma/sıralama yapar
+\usepackage{enumitem}
+\usepackage{hyperref}
 
-% ---------- Formatting ----------
-\onehalfspacing
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{6pt}
+\setlist[itemize]{noitemsep, topsep=2pt}
 
-% ---------- Title Info (EDIT) ----------
-\newcommand{\ProjectTitle}{PROJECT TITLE HERE}
-\newcommand{\CourseName}{EMÜ 405 System Analyses and Design I}
-\newcommand{\ReportType}{FINAL REPORT}
-\newcommand{\AdvisorName}{Advisor Name Here}
-\newcommand{\PresentationDate}{Date of Presentation Here}
-\newcommand{\CityCountry}{Ankara / TURKEY}
+\title{Mathematical Model: Single-Day VRPSPD with Operational Constraints and Backlog Penalties}
+\date{}
 
-% Student list (alphabetical by last name)
-\newcommand{\StudentA}{Student Name Surname (ID)}
-\newcommand{\StudentB}{Student Name Surname (ID)}
-\newcommand{\StudentC}{Student Name Surname (ID)}
-% add more if needed
-
-% ---------- Document ----------
 \begin{document}
+\maketitle
 
-% =========================
-% Cover Page
-% =========================
-\begin{titlepage}
-    \centering
-    {\Large \ProjectTitle \par}
-    \vspace{1.0cm}
-    {\large \CourseName \par}
-    \vspace{0.8cm}
-    {\Large \ReportType \par}
-    \vspace{0.8cm}
+% =========================================================
+\section{Problem Class}
+% =========================================================
+The project addresses a:
+\textit{Capacitated Vehicle Routing Problem with Simultaneous Pickup and Delivery (VRPSPD)}
+with route-length, stop-count, vehicle-capacity, route-duration (shift) and neighborhood-adjacency constraints.
 
-    {\large By \par}
-    \vspace{0.3cm}
-    {\large \StudentA \par}
-    {\large \StudentB \par}
-    {\large \StudentC \par}
-
-    \vspace{0.8cm}
-    {\large Advisor \par}
-    {\large \AdvisorName \par}
-
-    \vfill
-    {\large SUBMITTED TO THE DEPARTMENT OF INDUSTRIAL ENGINEERING OF HACETTEPE UNIVERSITY \par}
-    \vspace{0.5cm}
-    {\large \PresentationDate \par}
-    {\large \CityCountry \par}
-\end{titlepage}
-
-% =========================
-% Abstract
-% =========================
-\section*{ABSTRACT}
-% (Write a concise abstract; no citations; summarize problem, aim, method, results)
-\textbf{Abstract:} \\
-Write 100--250 words here.
-
-\vspace{0.3cm}
-\textbf{Key Words:} [keyword1; keyword2; keyword3; ...]
-
-\newpage
-
-% =========================
-% Contents + Lists
-% =========================
-\tableofcontents
-\newpage
-
-\listoffigures
-\newpage
-
-\listoftables
-\newpage
-
-\section*{ABBREVIATIONS}
-% Optional but recommended
+This classification follows directly from:
 \begin{itemize}
-    \item VRP: Vehicle Routing Problem
-    \item VRPSPD: Capacitated Vehicle Routing Problem with Simultaneous Pickup and Delivery
-    \item MILP: Mixed-Integer Linear Programming
-    \item MTZ: Miller--Tucker--Zemlin
-    \item UNSDG: United Nations Sustainable Development Goals
+    \item simultaneous pickup and delivery at customer stops,
+    \item dynamically changing vehicle load,
+    \item capacity constraints,
+    \item routes starting and ending at a single depot,
+    \item no binding fleet size constraint (fleet chosen sufficiently large),
+    \item operational constraints imposed by UPS (shift duration, stop limits, spatial compactness).
 \end{itemize}
 
-\newpage
-
-% =========================
-% 1. Introduction
-% =========================
-\section{INTRODUCTION}
-Background, motivation, context, and brief report roadmap.
-
-% =========================
-% 2. Literature Review
-% =========================
-\section{LITERATURE REVIEW}
-Summarize relevant studies; add citations with IEEE style if you use BibTeX later or manual numbering.
-
-% =========================
-% 3. Scope of the Project
-% =========================
-\section{SCOPE OF THE PROJECT}
-
-\subsection{Problem Definition}
-Define the problem clearly.
-
-\subsubsection{UNSDG Consideration for Problem Definition}
-Which UNSDG(s) are relevant and why.
-
-\subsection{Objectives of the Study}
+% =========================================================
+\section{Sets and Indices}
+% =========================================================
 \begin{itemize}
-    \item Objective 1: ...
-    \item Objective 2: ...
-    \item Objective 3: ...
+    \item $N=\{0,1,\dots,n\}$: set of nodes; node $0$ is the depot (Istanbul Anadolu Aktarma Merkezi coordinates: $(40.920153,\,29.348245)$), and nodes $1,\dots,n$ are customer stops.
+    \item $C = N\setminus\{0\}$: set of customer nodes.
+    \item $K$: set of vehicles identified by unique IDs (vehicle dataset). Each $k\in K$ is a unique vehicle.
+    \item $L$: set of neighborhoods (districts).
+    \item $V$: set of vehicle types (stored as an attribute of each vehicle in the dataset).
+    \item $R$: set of shipment types (e.g., $R=\{\text{Normal},\text{Urgent}\}$).
+    \item Indices: $i,j\in N$ (nodes), $i,j\in C$ (customers), $k\in K$ (vehicles), $r\in R$ (shipment type).
 \end{itemize}
 
-\subsubsection{Real Life Constraints of the Study}
+% =========================================================
+\section{Parameters}
+% =========================================================
 \begin{itemize}
-    \item Constraint 1 (e.g., capacity, time window, shift, stop count): ...
-    \item Constraint 2: ...
+    \item $d_{ij}$: distance between node $i$ and node $j$.
+    \item $t_{ij}$: travel time between node $i$ and node $j$.
+    \item $s_i$: service time at node $i$ ($s_0=0$).
+    \item $Q$: vehicle capacity (350 packages).
+    \item $S_{\min}$: minimum stops per route (80).
+    \item $S_{\max}$: maximum stops per route (110).
+    \item $T_{\min}$: minimum route duration (420 minutes, 7 hours).
+    \item $T_{\max}$: maximum route duration (510 minutes, 8.5 hours).
+    \item $h_i \in L$: neighborhood of node $i$.
+    \item $A_{lm}\in\{0,1\}$: 1 if neighborhoods $l$ and $m$ are adjacent, 0 otherwise.
+    \item $\text{type}_k \in V$: type attribute of vehicle $k$ (from the vehicle dataset).
+
+    \item $F_k$: fixed cost of activating vehicle $k$.
+    \item $c_k^{dist}$: distance cost coefficient for vehicle $k$.
+    \item $c_k^{time}$: time cost coefficient for vehicle $k$.
+    \item $c^{stop}$: per-stop cost (each visited customer stop).
+
+    \item $P_{ir}$: pickup demand quantity at customer $i$ of shipment type $r$.
+    \item $D_{ir}$: delivery demand quantity at customer $i$ of shipment type $r$.
+    \item $P^{p}_{r}$: backlog penalty coefficient for pickup of type $r$.
+    \item $P^{d}_{r}$: backlog penalty coefficient for delivery of type $r$.
+
+    \item $M$: sufficiently large constant.
 \end{itemize}
 
-\subsubsection{Ethical Considerations}
-Fairness, data privacy, workload balance, etc.
-
-\subsection{Multidisciplinary Approaches and Interactions}
-How IE interacts with CS, logistics, operations, etc.
-
-% =========================
-% 4. Methodologies
-% =========================
-\section{METHODOLOGIES}
-
-\subsection{Problem Formulation / Mathematical Model (MILP)}
-% Paste your final MILP section here (sets, parameters, variables, objective, constraints)
-Insert MILP here.
-
-\subsection{Solution Approach}
-% Solver, implementation, assumptions
+% =========================================================
+\section{Decision Variables}
+% =========================================================
 \begin{itemize}
-    \item Solver and version: ...
-    \item Hardware/compute environment: ...
-    \item Time limit / optimality gap: ...
+    \item $x_{kij}\in\{0,1\}$: 1 if vehicle $k$ travels from node $i$ to node $j$.
+    \item $y_{ki}\in\{0,1\}$: 1 if customer node $i$ is visited/served by vehicle $k$.
+    \item $z_k\in\{0,1\}$: 1 if vehicle $k$ is used (activated).
+
+    \item $q_{ki}\ge 0$: load of vehicle $k$ after visiting node $i$.
+    \item $a_{ki}\ge 0$: arrival time of vehicle $k$ at node $i$.
+    \item $T_k\ge 0$: total route duration of vehicle $k$ (used for shift constraints, not in the objective).
+
+    \item $\pi_{kir}\ge 0$: pickup amount of type $r$ collected by vehicle $k$ at customer $i$.
+    \item $\delta_{kir}\ge 0$: delivery amount of type $r$ delivered by vehicle $k$ at customer $i$.
+
+    \item $B^{p}_{ir}\ge 0$: pickup backlog amount for customer $i$ and type $r$.
+    \item $B^{d}_{ir}\ge 0$: delivery backlog amount for customer $i$ and type $r$.
+
+    \item $u_{ki}\ge 0$: MTZ ordering variable for subtour elimination.
 \end{itemize}
 
-\subsection{Experimental Design (Scenarios)}
-\begin{itemize}
-    \item Scenario 1: ...
-    \item Scenario 2: ...
-    \item Scenario 3: ...
-\end{itemize}
+% =========================================================
+\section{Objective Function}
+% =========================================================
+Objective: Minimize total cost including distance/time costs (vehicle-dependent),
+fixed vehicle activation cost, per-stop cost, and type-based backlog penalties.
 
-% =========================
-% 5. Analysis and Results
-% =========================
-\section{ANALYSIS AND RESULTS}
+\begin{equation}
+\min Z
+=
+\sum_{k\in K}\sum_{i\in N}\sum_{\substack{j\in N\\ j\neq i}}
+\Big( c_k^{dist}\, d_{ij} + c_k^{time}\, t_{ij} \Big)\, x_{kij}
+\;+\;
+\sum_{k\in K} F_k\, z_k
+\;+\;
+c^{stop}\sum_{k\in K}\sum_{i\in C} y_{ki}
+\;+\;
+\sum_{i\in C}\sum_{r\in R}
+\Big( P^{p}_{r}\,B^{p}_{ir} + P^{d}_{r}\,B^{d}_{ir} \Big)
+\end{equation}
 
-\subsection{Analysis}
-% Must explain: how experiments were designed, conducted, data collected, outputs analyzed
-Explain methodology of analysis: KPIs, scenario setup, data pipeline, validation checks, etc.
+\noindent\textbf{EN:} Total cost includes distance/time costs (vehicle-dependent), fixed vehicle usage cost,
+per-stop cost, and type-based backlog penalties (Urgent has higher penalty).\\
+\textbf{TR:} Toplam maliyet; mesafe/süre maliyetleri (araç bazlı), araç kullanım sabit maliyeti,
+durak başı maliyet ve tür bazlı backlog cezasını içerir (Acil türün cezası daha yüksektir).
 
-\subsection{Results}
-% Thorough interpretation is expected
-% Example table:
-\begin{table}[h]
-\centering
-\caption{Example KPI Summary (replace with your results)}
-\begin{tabular}{lccc}
-\toprule
-KPI & Scenario 1 & Scenario 2 & Scenario 3 \\
-\midrule
-Total cost &  &  &  \\
-Urgent backlog (end) &  &  &  \\
-Normal backlog (end) &  &  &  \\
-Vehicles used &  &  &  \\
-\bottomrule
-\end{tabular}
-\end{table}
+% =========================================================
+\section{Constraints}
+% =========================================================
 
-% Example figure block:
-% \begin{figure}[h]
-% \centering
-% \includegraphics[width=0.85\textwidth]{example_figure.png}
-% \caption{Example Figure Caption (replace with your figure)}
-% \label{fig:example}
-% \end{figure}
+\subsection{1) Customer Assignment}
+Each customer is served exactly once:
+\begin{equation}
+\sum_{k \in K} y_{ki} = 1
+\qquad \forall i \in C
+\end{equation}
 
-% =========================
-% 6. Discussions
-% =========================
-\section{DISCUSSIONS}
-% Report all sub-sections and relate relevant UNSDGs where appropriate
+\subsection{2) Vehicle Activation}
+A vehicle is active if it serves at least one customer:
+\begin{equation}
+\sum_{i \in C} y_{ki} \le M\,z_k
+\qquad \forall k \in K
+\end{equation}
 
-\subsection{Study limitations}
-Limitations: modeling assumptions, data limits, scalability, etc.
+\subsection{3) Flow Conservation (Linking $x$ and $y$)}
+For each customer node, if it is served by vehicle $k$, it must have exactly one incoming and one outgoing arc:
+\begin{equation}
+\sum_{\substack{j\in N\\ j\neq i}} x_{kij} = y_{ki}
+\qquad \forall i\in C,\;\forall k\in K
+\end{equation}
+\begin{equation}
+\sum_{\substack{j\in N\\ j\neq i}} x_{kji} = y_{ki}
+\qquad \forall i\in C,\;\forall k\in K
+\end{equation}
 
-\subsection{Applicability of the project under real life situations}
-How/when it can be applied; deployment notes.\cite{UN_SDG_2025}
-\subsection{Health and Safety Issues}
-Operational safety, driver workload, road safety, etc.
+\subsection{4) Depot Constraints}
+Each active vehicle starts and ends at the depot:
+\begin{equation}
+\sum_{j \in C} x_{k0j} = z_k
+\qquad \forall k \in K
+\end{equation}
+\begin{equation}
+\sum_{i \in C} x_{ki0} = z_k
+\qquad \forall k \in K
+\end{equation}
 
-\subsection{Legal Issues}
-Data protection, compliance, regulations.
+\subsection{5) Stop Count Constraints}
+\begin{equation}
+S_{\min}\, z_k \le \sum_{i \in C} y_{ki} \le S_{\max}\, z_k
+\qquad \forall k \in K
+\end{equation}
 
-\subsection{Economical Issues and Constraints}
-Costs, budget, ROI, constraints.
+\subsection{6) Neighborhood-Adjacency (Spatial Compactness)}
+Vehicles cannot directly travel between non-adjacent neighborhoods:
+\begin{equation}
+x_{kij} \le A_{h_i h_j}
+\qquad \forall i\in C,\;\forall j\in C,\; i\neq j,\;\forall k\in K
+\end{equation}
 
-\subsection{Sustainability}
-Emissions, efficiency, UN SDGs, etc.
+\subsection{7) Backlog Definition (Single-Day)}
+Unserved pickup/delivery demand becomes backlog (type-based):
+\begin{equation}
+\sum_{k\in K}\pi_{kir} + B^{p}_{ir} = P_{ir}
+\qquad \forall i\in C,\;\forall r\in R
+\end{equation}
+\begin{equation}
+\sum_{k\in K}\delta_{kir} + B^{d}_{ir} = D_{ir}
+\qquad \forall i\in C,\;\forall r\in R
+\end{equation}
 
-\subsection{Producibility-Manufacturability}
-If relevant; otherwise justify N/A.
+Tie served quantities to whether customer is visited by vehicle $k$:
+\begin{equation}
+0 \le \pi_{kir} \le P_{ir}\, y_{ki}
+\qquad \forall i\in C,\;\forall k\in K,\;\forall r\in R
+\end{equation}
+\begin{equation}
+0 \le \delta_{kir} \le D_{ir}\, y_{ki}
+\qquad \forall i\in C,\;\forall k\in K,\;\forall r\in R
+\end{equation}
 
-\subsection{Social and Political Issues}
-Equity, social impacts, etc.
+\subsection{8) Dynamic Capacity Constraints (Simultaneous Pickup \& Delivery)}
+Initial load at depot equals total deliveries assigned to the vehicle:
+\begin{equation}
+q_{k0} = \sum_{i\in C}\sum_{r\in R}\delta_{kir}
+\qquad \forall k\in K
+\end{equation}
 
-\subsection{Environmental Issues}
-Environmental impacts, waste, emissions.
+Load propagation along arcs (two-sided Big-M to enforce equality when $x_{kij}=1$):
+\begin{equation}
+q_{kj} \ge q_{ki} - \sum_{r\in R}\delta_{kjr} + \sum_{r\in R}\pi_{kjr} - M(1-x_{kij})
+\qquad \forall i\in N,\;\forall j\in C,\; i\neq j,\;\forall k\in K
+\end{equation}
+\begin{equation}
+q_{kj} \le q_{ki} - \sum_{r\in R}\delta_{kjr} + \sum_{r\in R}\pi_{kjr} + M(1-x_{kij})
+\qquad \forall i\in N,\;\forall j\in C,\; i\neq j,\;\forall k\in K
+\end{equation}
 
-\subsection{Multidisciplinary Collaboration}
-Team coordination, cross-discipline contributions.
+Capacity bounds:
+\begin{equation}
+0 \le q_{ki} \le Q
+\qquad \forall i\in N,\;\forall k\in K
+\end{equation}
 
-% =========================
-% 7. Conclusions
-% =========================
-\section{CONCLUSIONS}
-Conclude with key findings and what they mean.
+\subsection{9) Route Duration (Shift) Constraints}
+Time propagation:
+\begin{equation}
+a_{kj} \ge a_{ki} + s_i + t_{ij} - M(1-x_{kij})
+\qquad \forall i\in N,\;\forall j\in N,\; i\neq j,\;\forall k\in K
+\end{equation}
 
-% =========================
-% 8. Project Plan and Future Studies
-% =========================
-\section{PROJECT PLAN AND FUTURE STUDIES}
-Remaining tasks, future improvements, and updated Gantt chart.
+Fix start time at depot:
+\begin{equation}
+a_{k0}=0
+\qquad \forall k\in K
+\end{equation}
 
-% \begin{figure}[h]
-% \centering
-% \includegraphics[width=0.9\textwidth]{gantt_chart.png}
-% \caption{Project plan (Gantt chart) --- replace with your updated chart}
-% \label{fig:gantt}
-% \end{figure}
+Route duration variable (arrival back to depot):
+\begin{equation}
+T_k \ge a_{ki} + s_i + t_{i0} - M(1-x_{ki0})
+\qquad \forall i\in C,\;\forall k\in K
+\end{equation}
 
-% =========================
-% 9. References
-% =========================
-\section{REFERENCES}
-% Option A: Manual IEEE numbered list
-\begin{thebibliography}{99}
-\bibitem{ref1} Author, ``Title,'' Journal/Conference, year.
-\bibitem{ref2} Author, \textit{Book Title}. Publisher, year.
-\end{thebibliography}
+Shift bounds:
+\begin{equation}
+T_{\min}\, z_k \le T_k \le T_{\max}\, z_k
+\qquad \forall k\in K
+\end{equation}
 
-% =========================
-% 10. Appendix
-% =========================
-\section{APPENDIX}
-\subsection*{Appendix A: Additional Tables / Figures}
-Extra material here.
+\subsection{10) Subtour Elimination (MTZ)}
+MTZ constraints per vehicle:
+\begin{equation}
+u_{ki} - u_{kj} + |C|\,x_{kij} \le |C| - 1
+\qquad \forall i\in C,\;\forall j\in C,\; i\neq j,\;\forall k\in K
+\end{equation}
+Link ordering to visits:
+\begin{equation}
+y_{ki} \le u_{ki} \le |C|\,y_{ki}
+\qquad \forall i\in C,\;\forall k\in K
+\end{equation}
 
-
-
-
-\section{references}
-\bibliographystyle{IEEEtran}
-\bibliography{ref}
-
+\subsection{11) Variable Domains}
+\begin{equation}
+x_{kij},\,y_{ki},\,z_k \in \{0,1\}
+\end{equation}
+\begin{equation}
+q_{ki}\ge 0,\quad a_{ki}\ge 0,\quad T_k\ge 0,\quad
+\pi_{kir}\ge 0,\quad \delta_{kir}\ge 0,\quad
+B^{p}_{ir}\ge 0,\quad B^{d}_{ir}\ge 0,\quad u_{ki}\ge 0
+\end{equation}
 
 \end{document}
