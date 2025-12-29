@@ -1,0 +1,290 @@
+% =========================
+% EMU405 Final Report Template (LaTeX)
+% Based on "GP FINAL Report format (updated).pdf"
+% =========================
+
+\documentclass[12pt,a4paper]{article}
+
+% ---------- Packages ----------
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{setspace}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage[hidelinks]{hyperref}
+\usepackage{caption}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{url}        % \url{} komutu için
+\usepackage[hidelinks]{hyperref}  % linkleri düzgün basar (mümkünse en sona yakın)
+\usepackage{cite}       % IEEE tarzı [1–3] gibi sıkıştırma/sıralama yapar
+
+% ---------- Formatting ----------
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+% ---------- Title Info (EDIT) ----------
+\newcommand{\ProjectTitle}{PROJECT TITLE HERE}
+\newcommand{\CourseName}{EMÜ 405 System Analyses and Design I}
+\newcommand{\ReportType}{FINAL REPORT}
+\newcommand{\AdvisorName}{Advisor Name Here}
+\newcommand{\PresentationDate}{Date of Presentation Here}
+\newcommand{\CityCountry}{Ankara / TURKEY}
+
+% Student list (alphabetical by last name)
+\newcommand{\StudentA}{Student Name Surname (ID)}
+\newcommand{\StudentB}{Student Name Surname (ID)}
+\newcommand{\StudentC}{Student Name Surname (ID)}
+% add more if needed
+
+% ---------- Document ----------
+\begin{document}
+
+% =========================
+% Cover Page
+% =========================
+\begin{titlepage}
+    \centering
+    {\Large \ProjectTitle \par}
+    \vspace{1.0cm}
+    {\large \CourseName \par}
+    \vspace{0.8cm}
+    {\Large \ReportType \par}
+    \vspace{0.8cm}
+
+    {\large By \par}
+    \vspace{0.3cm}
+    {\large \StudentA \par}
+    {\large \StudentB \par}
+    {\large \StudentC \par}
+
+    \vspace{0.8cm}
+    {\large Advisor \par}
+    {\large \AdvisorName \par}
+
+    \vfill
+    {\large SUBMITTED TO THE DEPARTMENT OF INDUSTRIAL ENGINEERING OF HACETTEPE UNIVERSITY \par}
+    \vspace{0.5cm}
+    {\large \PresentationDate \par}
+    {\large \CityCountry \par}
+\end{titlepage}
+
+% =========================
+% Abstract
+% =========================
+\section*{ABSTRACT}
+% (Write a concise abstract; no citations; summarize problem, aim, method, results)
+\textbf{Abstract:} \\
+Write 100--250 words here.
+
+\vspace{0.3cm}
+\textbf{Key Words:} [keyword1; keyword2; keyword3; ...]
+
+\newpage
+
+% =========================
+% Contents + Lists
+% =========================
+\tableofcontents
+\newpage
+
+\listoffigures
+\newpage
+
+\listoftables
+\newpage
+
+\section*{ABBREVIATIONS}
+% Optional but recommended
+\begin{itemize}
+    \item VRP: Vehicle Routing Problem
+    \item VRPSPD: Capacitated Vehicle Routing Problem with Simultaneous Pickup and Delivery
+    \item MILP: Mixed-Integer Linear Programming
+    \item MTZ: Miller--Tucker--Zemlin
+    \item UNSDG: United Nations Sustainable Development Goals
+\end{itemize}
+
+\newpage
+
+% =========================
+% 1. Introduction
+% =========================
+\section{INTRODUCTION}
+Background, motivation, context, and brief report roadmap.
+
+% =========================
+% 2. Literature Review
+% =========================
+\section{LITERATURE REVIEW}
+Summarize relevant studies; add citations with IEEE style if you use BibTeX later or manual numbering.
+
+% =========================
+% 3. Scope of the Project
+% =========================
+\section{SCOPE OF THE PROJECT}
+
+\subsection{Problem Definition}
+Define the problem clearly.
+
+\subsubsection{UNSDG Consideration for Problem Definition}
+Which UNSDG(s) are relevant and why.
+
+\subsection{Objectives of the Study}
+\begin{itemize}
+    \item Objective 1: ...
+    \item Objective 2: ...
+    \item Objective 3: ...
+\end{itemize}
+
+\subsubsection{Real Life Constraints of the Study}
+\begin{itemize}
+    \item Constraint 1 (e.g., capacity, time window, shift, stop count): ...
+    \item Constraint 2: ...
+\end{itemize}
+
+\subsubsection{Ethical Considerations}
+Fairness, data privacy, workload balance, etc.
+
+\subsection{Multidisciplinary Approaches and Interactions}
+How IE interacts with CS, logistics, operations, etc.
+
+% =========================
+% 4. Methodologies
+% =========================
+\section{METHODOLOGIES}
+
+\subsection{Problem Formulation / Mathematical Model (MILP)}
+% Paste your final MILP section here (sets, parameters, variables, objective, constraints)
+Insert MILP here.
+
+\subsection{Solution Approach}
+% Solver, implementation, assumptions
+\begin{itemize}
+    \item Solver and version: ...
+    \item Hardware/compute environment: ...
+    \item Time limit / optimality gap: ...
+\end{itemize}
+
+\subsection{Experimental Design (Scenarios)}
+\begin{itemize}
+    \item Scenario 1: ...
+    \item Scenario 2: ...
+    \item Scenario 3: ...
+\end{itemize}
+
+% =========================
+% 5. Analysis and Results
+% =========================
+\section{ANALYSIS AND RESULTS}
+
+\subsection{Analysis}
+% Must explain: how experiments were designed, conducted, data collected, outputs analyzed
+Explain methodology of analysis: KPIs, scenario setup, data pipeline, validation checks, etc.
+
+\subsection{Results}
+% Thorough interpretation is expected
+% Example table:
+\begin{table}[h]
+\centering
+\caption{Example KPI Summary (replace with your results)}
+\begin{tabular}{lccc}
+\toprule
+KPI & Scenario 1 & Scenario 2 & Scenario 3 \\
+\midrule
+Total cost &  &  &  \\
+Urgent backlog (end) &  &  &  \\
+Normal backlog (end) &  &  &  \\
+Vehicles used &  &  &  \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% Example figure block:
+% \begin{figure}[h]
+% \centering
+% \includegraphics[width=0.85\textwidth]{example_figure.png}
+% \caption{Example Figure Caption (replace with your figure)}
+% \label{fig:example}
+% \end{figure}
+
+% =========================
+% 6. Discussions
+% =========================
+\section{DISCUSSIONS}
+% Report all sub-sections and relate relevant UNSDGs where appropriate
+
+\subsection{Study limitations}
+Limitations: modeling assumptions, data limits, scalability, etc.
+
+\subsection{Applicability of the project under real life situations}
+How/when it can be applied; deployment notes.\cite{UN_SDG_2025}
+\subsection{Health and Safety Issues}
+Operational safety, driver workload, road safety, etc.
+
+\subsection{Legal Issues}
+Data protection, compliance, regulations.
+
+\subsection{Economical Issues and Constraints}
+Costs, budget, ROI, constraints.
+
+\subsection{Sustainability}
+Emissions, efficiency, UN SDGs, etc.
+
+\subsection{Producibility-Manufacturability}
+If relevant; otherwise justify N/A.
+
+\subsection{Social and Political Issues}
+Equity, social impacts, etc.
+
+\subsection{Environmental Issues}
+Environmental impacts, waste, emissions.
+
+\subsection{Multidisciplinary Collaboration}
+Team coordination, cross-discipline contributions.
+
+% =========================
+% 7. Conclusions
+% =========================
+\section{CONCLUSIONS}
+Conclude with key findings and what they mean.
+
+% =========================
+% 8. Project Plan and Future Studies
+% =========================
+\section{PROJECT PLAN AND FUTURE STUDIES}
+Remaining tasks, future improvements, and updated Gantt chart.
+
+% \begin{figure}[h]
+% \centering
+% \includegraphics[width=0.9\textwidth]{gantt_chart.png}
+% \caption{Project plan (Gantt chart) --- replace with your updated chart}
+% \label{fig:gantt}
+% \end{figure}
+
+% =========================
+% 9. References
+% =========================
+\section{REFERENCES}
+% Option A: Manual IEEE numbered list
+\begin{thebibliography}{99}
+\bibitem{ref1} Author, ``Title,'' Journal/Conference, year.
+\bibitem{ref2} Author, \textit{Book Title}. Publisher, year.
+\end{thebibliography}
+
+% =========================
+% 10. Appendix
+% =========================
+\section{APPENDIX}
+\subsection*{Appendix A: Additional Tables / Figures}
+Extra material here.
+
+
+
+
+\section{references}
+\bibliographystyle{IEEEtran}
+\bibliography{ref}
+
+
+\end{document}
