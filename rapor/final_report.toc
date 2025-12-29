@@ -9,24 +9,41 @@
 \contentsline {subsection}{\numberline {3.3}Multidisciplinary Approaches and Interactions}{8}{subsection.3.3}%
 \contentsline {section}{\numberline {4}METHODOLOGIES}{8}{section.4}%
 \contentsline {subsection}{\numberline {4.1}Problem Formulation / Mathematical Model (MILP)}{8}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Solution Approach}{8}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}Experimental Design (Scenarios)}{8}{subsection.4.3}%
-\contentsline {section}{\numberline {5}ANALYSIS AND RESULTS}{8}{section.5}%
-\contentsline {subsection}{\numberline {5.1}Analysis}{8}{subsection.5.1}%
-\contentsline {subsection}{\numberline {5.2}Results}{9}{subsection.5.2}%
-\contentsline {section}{\numberline {6}DISCUSSIONS}{9}{section.6}%
-\contentsline {subsection}{\numberline {6.1}Study limitations}{9}{subsection.6.1}%
-\contentsline {subsection}{\numberline {6.2}Applicability of the project under real life situations}{9}{subsection.6.2}%
-\contentsline {subsection}{\numberline {6.3}Health and Safety Issues}{9}{subsection.6.3}%
-\contentsline {subsection}{\numberline {6.4}Legal Issues}{9}{subsection.6.4}%
-\contentsline {subsection}{\numberline {6.5}Economical Issues and Constraints}{9}{subsection.6.5}%
-\contentsline {subsection}{\numberline {6.6}Sustainability}{9}{subsection.6.6}%
-\contentsline {subsection}{\numberline {6.7}Producibility-Manufacturability}{10}{subsection.6.7}%
-\contentsline {subsection}{\numberline {6.8}Social and Political Issues}{10}{subsection.6.8}%
-\contentsline {subsection}{\numberline {6.9}Environmental Issues}{10}{subsection.6.9}%
-\contentsline {subsection}{\numberline {6.10}Multidisciplinary Collaboration}{10}{subsection.6.10}%
-\contentsline {section}{\numberline {7}CONCLUSIONS}{10}{section.7}%
-\contentsline {section}{\numberline {8}PROJECT PLAN AND FUTURE STUDIES}{10}{section.8}%
-\contentsline {section}{\numberline {9}REFERENCES}{10}{section.9}%
-\contentsline {section}{\numberline {10}APPENDIX}{11}{section.10}%
-\contentsline {section}{\numberline {11}references}{11}{section.11}%
+\contentsline {section}{\numberline {5}Problem Class}{8}{section.5}%
+\contentsline {section}{\numberline {6}Sets and Indices}{8}{section.6}%
+\contentsline {section}{\numberline {7}Parameters}{9}{section.7}%
+\contentsline {section}{\numberline {8}Decision Variables}{10}{section.8}%
+\contentsline {section}{\numberline {9}Objective Function}{10}{section.9}%
+\contentsline {section}{\numberline {10}Constraints}{11}{section.10}%
+\contentsline {subsection}{\numberline {10.1}1) Customer Assignment}{11}{subsection.10.1}%
+\contentsline {subsection}{\numberline {10.2}2) Vehicle Activation}{11}{subsection.10.2}%
+\contentsline {subsection}{\numberline {10.3}3) Flow Conservation (Linking $x$ and $y$)}{11}{subsection.10.3}%
+\contentsline {subsection}{\numberline {10.4}4) Depot Constraints}{11}{subsection.10.4}%
+\contentsline {subsection}{\numberline {10.5}5) Stop Count Constraints}{11}{subsection.10.5}%
+\contentsline {subsection}{\numberline {10.6}6) Neighborhood-Adjacency (Spatial Compactness)}{12}{subsection.10.6}%
+\contentsline {subsection}{\numberline {10.7}7) Backlog Definition (Single-Day)}{12}{subsection.10.7}%
+\contentsline {subsection}{\numberline {10.8}8) Dynamic Capacity Constraints (Simultaneous Pickup \& Delivery)}{12}{subsection.10.8}%
+\contentsline {subsection}{\numberline {10.9}9) Route Duration (Shift) Constraints}{13}{subsection.10.9}%
+\contentsline {subsection}{\numberline {10.10}10) Subtour Elimination (MTZ)}{13}{subsection.10.10}%
+\contentsline {subsection}{\numberline {10.11}11) Variable Domains}{13}{subsection.10.11}%
+\contentsline {subsection}{\numberline {10.12}Solution Approach}{13}{subsection.10.12}%
+\contentsline {subsection}{\numberline {10.13}Experimental Design (Scenarios)}{14}{subsection.10.13}%
+\contentsline {section}{\numberline {11}ANALYSIS AND RESULTS}{14}{section.11}%
+\contentsline {subsection}{\numberline {11.1}Analysis}{14}{subsection.11.1}%
+\contentsline {subsection}{\numberline {11.2}Results}{14}{subsection.11.2}%
+\contentsline {section}{\numberline {12}DISCUSSIONS}{14}{section.12}%
+\contentsline {subsection}{\numberline {12.1}Study limitations}{14}{subsection.12.1}%
+\contentsline {subsection}{\numberline {12.2}Applicability of the project under real life situations}{14}{subsection.12.2}%
+\contentsline {subsection}{\numberline {12.3}Health and Safety Issues}{14}{subsection.12.3}%
+\contentsline {subsection}{\numberline {12.4}Legal Issues}{15}{subsection.12.4}%
+\contentsline {subsection}{\numberline {12.5}Economical Issues and Constraints}{15}{subsection.12.5}%
+\contentsline {subsection}{\numberline {12.6}Sustainability}{15}{subsection.12.6}%
+\contentsline {subsection}{\numberline {12.7}Producibility-Manufacturability}{15}{subsection.12.7}%
+\contentsline {subsection}{\numberline {12.8}Social and Political Issues}{15}{subsection.12.8}%
+\contentsline {subsection}{\numberline {12.9}Environmental Issues}{15}{subsection.12.9}%
+\contentsline {subsection}{\numberline {12.10}Multidisciplinary Collaboration}{15}{subsection.12.10}%
+\contentsline {section}{\numberline {13}CONCLUSIONS}{15}{section.13}%
+\contentsline {section}{\numberline {14}PROJECT PLAN AND FUTURE STUDIES}{15}{section.14}%
+\contentsline {section}{\numberline {15}REFERENCES}{16}{section.15}%
+\contentsline {section}{\numberline {16}APPENDIX}{16}{section.16}%
+\contentsline {section}{\numberline {17}references}{16}{section.17}%
