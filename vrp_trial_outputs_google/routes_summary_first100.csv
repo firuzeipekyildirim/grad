@@ -1,0 +1,6 @@
+day,cluster_id,n_stops,total_km,total_min,mode,use_traffic
+Mon,0,17,107.367,163.6,driving,False
+Mon,1,30,111.104,210.33333333333334,driving,False
+Mon,2,5,130.194,115.18333333333334,driving,False
+Mon,3,26,120.843,203.91666666666666,driving,False
+Mon,4,22,81.91,149.05,driving,False
