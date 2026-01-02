@@ -1,77 +1,84 @@
 \contentsline {section}{\numberline {1}INTRODUCTION}{0}{section.1}%
 \contentsline {section}{\numberline {2}LITERATURE REVIEW}{1}{section.2}%
-\contentsline {section}{\numberline {3}SCOPE OF THE PROJECT}{2}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Problem Definition}{2}{subsection.3.1}%
-\contentsline {subsubsection}{\numberline {3.1.1}UNSDG Consideration for Problem Definition}{4}{subsubsection.3.1.1}%
-\contentsline {subsection}{\numberline {3.2}Objectives of the Study}{4}{subsection.3.2}%
-\contentsline {subsubsection}{\numberline {3.2.1}Real Life Constraints of the Study}{4}{subsubsection.3.2.1}%
-\contentsline {subsubsection}{\numberline {3.2.2}Ethical Considerations}{5}{subsubsection.3.2.2}%
-\contentsline {subsection}{\numberline {3.3}Multidisciplinary Approaches and Interactions}{6}{subsection.3.3}%
-\contentsline {section}{\numberline {4}METHODOLOGIES}{8}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Mixed Integer Linear Programming (MILP)}{8}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Exact Optimization via Gurobi}{8}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}Heuristic and Metaheuristic Alternatives}{9}{subsection.4.3}%
-\contentsline {subsubsection}{\numberline {4.3.1}Constructive Heuristics}{9}{subsubsection.4.3.1}%
-\contentsline {subsubsection}{\numberline {4.3.2}Local Search - Based Improvement Methods}{9}{subsubsection.4.3.2}%
-\contentsline {subsubsection}{\numberline {4.3.3}Metaheuristic Optimization}{9}{subsubsection.4.3.3}%
-\contentsline {subsubsection}{\numberline {4.3.4}Strongly Candidate Approach: Cluster-First, Route-Second Heuristic}{10}{subsubsection.4.3.4}%
-\contentsline {subsection}{\numberline {4.4}Experimental Performance Analysis}{10}{subsection.4.4}%
-\contentsline {subsection}{\numberline {4.5}Application to Real UPS Operational Data}{10}{subsection.4.5}%
-\contentsline {subsection}{\numberline {4.6}Limitations of the Proposed Methodologies}{10}{subsection.4.6}%
-\contentsline {subsubsection}{\numberline {4.6.1}Limitations of Exact Optimization (MILP)}{11}{subsubsection.4.6.1}%
-\contentsline {subsubsection}{\numberline {4.6.2}Limitations of Heuristic Approaches (Fisher \& Jaikumar)}{11}{subsubsection.4.6.2}%
-\contentsline {section}{\numberline {5}ANALYSIS AND RESULTS}{12}{section.5}%
-\contentsline {subsection}{\numberline {5.1}Mathematical Model}{12}{subsection.5.1}%
-\contentsline {subsubsection}{\numberline {5.1.1}Sets and Indices}{12}{subsubsection.5.1.1}%
-\contentsline {subsubsection}{\numberline {5.1.2}Parameters}{12}{subsubsection.5.1.2}%
-\contentsline {subsubsection}{\numberline {5.1.3}Decision Variables}{13}{subsubsection.5.1.3}%
-\contentsline {subsubsection}{\numberline {5.1.4}Objective Function}{13}{subsubsection.5.1.4}%
-\contentsline {subsubsection}{\numberline {5.1.5}Constraints}{13}{subsubsection.5.1.5}%
-\contentsline {paragraph}{Customer Assignment}{13}{paragraph*.1}%
-\contentsline {paragraph}{Vehicle Activation}{13}{paragraph*.2}%
-\contentsline {paragraph}{Flow Conservation}{14}{paragraph*.3}%
-\contentsline {paragraph}{Depot Constraints}{14}{paragraph*.4}%
-\contentsline {paragraph}{Stop Count Constraints}{14}{paragraph*.5}%
-\contentsline {paragraph}{Dynamic Capacity Constraints}{14}{paragraph*.6}%
-\contentsline {paragraph}{Time Feasibility}{14}{paragraph*.7}%
-\contentsline {paragraph}{MTZ Subtour Elimination}{14}{paragraph*.8}%
-\contentsline {subsection}{\numberline {5.2}Analysis}{14}{subsection.5.2}%
-\contentsline {subsection}{\numberline {5.3}Results}{15}{subsection.5.3}%
-\contentsline {section}{\numberline {6}DISCUSSIONS}{16}{section.6}%
-\contentsline {subsection}{\numberline {6.1}Study limitations}{16}{subsection.6.1}%
-\contentsline {subsection}{\numberline {6.2}Applicability of the project under real life situations}{16}{subsection.6.2}%
-\contentsline {subsection}{\numberline {6.3}Health and Safety Issues}{16}{subsection.6.3}%
-\contentsline {subsubsection}{\numberline {6.3.1}Occupational Health Risks}{16}{subsubsection.6.3.1}%
-\contentsline {subsubsection}{\numberline {6.3.2}Public Health \& Safety}{16}{subsubsection.6.3.2}%
-\contentsline {subsubsection}{\numberline {6.3.3}Relevant UNSDGs:}{16}{subsubsection.6.3.3}%
-\contentsline {subsection}{\numberline {6.4}Legal Issues}{17}{subsection.6.4}%
-\contentsline {subsubsection}{\numberline {6.4.1}Regulatory Constraints and Compliance Risk}{17}{subsubsection.6.4.1}%
-\contentsline {subsubsection}{\numberline {6.4.2}Algorithmic Compliance by Design}{18}{subsubsection.6.4.2}%
-\contentsline {subsubsection}{\numberline {6.4.3}Data Protection and Regulatory Accountability}{18}{subsubsection.6.4.3}%
-\contentsline {subsubsection}{\numberline {6.4.4}Relevant UNSDGs}{18}{subsubsection.6.4.4}%
-\contentsline {subsection}{\numberline {6.5}Economical Issues and Constraints}{19}{subsection.6.5}%
-\contentsline {subsubsection}{\numberline {6.5.1}Cost structure and budget constraints}{19}{subsubsection.6.5.1}%
-\contentsline {subsubsection}{\numberline {6.5.2}ROI and business case logic}{19}{subsubsection.6.5.2}%
-\contentsline {subsubsection}{\numberline {6.5.3}Financial risk and sensitivity}{20}{subsubsection.6.5.3}%
-\contentsline {subsubsection}{\numberline {6.5.4}Relevant UNSDGs}{20}{subsubsection.6.5.4}%
-\contentsline {subsection}{\numberline {6.6}Sustainability Issues}{20}{subsection.6.6}%
-\contentsline {subsubsection}{\numberline {6.6.1}Environmental Sustainability}{20}{subsubsection.6.6.1}%
-\contentsline {subsubsection}{\numberline {6.6.2}Operational Sustainability}{21}{subsubsection.6.6.2}%
-\contentsline {subsubsection}{\numberline {6.6.3}Social Sustainability}{21}{subsubsection.6.6.3}%
-\contentsline {subsubsection}{\numberline {6.6.4}Rebound Effect}{21}{subsubsection.6.6.4}%
-\contentsline {subsubsection}{\numberline {6.6.5}Relevant UNSDGs}{21}{subsubsection.6.6.5}%
-\contentsline {subsection}{\numberline {6.7}Producibility-Manufacturability Issues}{22}{subsection.6.7}%
-\contentsline {subsubsection}{\numberline {6.7.1}Producibility as timely solution generation}{22}{subsubsection.6.7.1}%
-\contentsline {subsubsection}{\numberline {6.7.2}Manufacturability as deployability and sustainable operation}{23}{subsubsection.6.7.2}%
-\contentsline {subsubsection}{\numberline {6.7.3} SLA and operational trust}{23}{subsubsection.6.7.3}%
-\contentsline {subsubsection}{\numberline {6.7.4}Relevant UNSDGs}{23}{subsubsection.6.7.4}%
-\contentsline {subsection}{\numberline {6.8}Social and Political Issues}{23}{subsection.6.8}%
-\contentsline {paragraph}{İlgili UNSDG sub-target'lar}{24}{paragraph*.10}%
-\contentsline {subsubsection}{\numberline {6.8.1}Gender Equality}{24}{subsubsection.6.8.1}%
-\contentsline {paragraph}{İlgili UNSDG sub-target'lar}{24}{paragraph*.11}%
-\contentsline {subsection}{\numberline {6.9}Environmental Issues}{24}{subsection.6.9}%
-\contentsline {subsection}{\numberline {6.10}Multidisciplinary Collaboration}{24}{subsection.6.10}%
-\contentsline {section}{\numberline {7}CONCLUSIONS}{25}{section.7}%
-\contentsline {section}{\numberline {8}PROJECT PLAN AND FUTURE STUDIES}{26}{section.8}%
-\contentsline {section}{\numberline {9}REFERENCES}{27}{section.9}%
-\contentsline {section}{\numberline {10}APPENDIX}{28}{section.10}%
+\contentsline {section}{\numberline {3}SCOPE OF THE PROJECT}{3}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Problem Definition}{3}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}UNSDG Consideration for Problem Definition}{5}{subsubsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.2}Objectives of the Study}{5}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Real Life Constraints of the Study}{5}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}Ethical Considerations}{6}{subsubsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.3}Multidisciplinary Approaches and Interactions}{7}{subsection.3.3}%
+\contentsline {section}{\numberline {4}METHODOLOGIES}{9}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Mixed Integer Linear Programming (MILP)}{9}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Exact Optimization via Gurobi}{9}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Heuristic and Metaheuristic Alternatives}{10}{subsection.4.3}%
+\contentsline {subsubsection}{\numberline {4.3.1}Constructive Heuristics}{10}{subsubsection.4.3.1}%
+\contentsline {subsubsection}{\numberline {4.3.2}Local Search - Based Improvement Methods}{10}{subsubsection.4.3.2}%
+\contentsline {subsubsection}{\numberline {4.3.3}Metaheuristic Optimization}{10}{subsubsection.4.3.3}%
+\contentsline {subsubsection}{\numberline {4.3.4}Strongly Candidate Approach: Cluster-First, Route-Second Heuristic}{11}{subsubsection.4.3.4}%
+\contentsline {subsection}{\numberline {4.4}Experimental Performance Analysis}{11}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}Application to Real UPS Operational Data}{11}{subsection.4.5}%
+\contentsline {subsection}{\numberline {4.6}Limitations of the Proposed Methodologies}{11}{subsection.4.6}%
+\contentsline {subsubsection}{\numberline {4.6.1}Limitations of Exact Optimization (MILP)}{12}{subsubsection.4.6.1}%
+\contentsline {subsubsection}{\numberline {4.6.2}Limitations of Heuristic Approaches (Fisher \& Jaikumar)}{12}{subsubsection.4.6.2}%
+\contentsline {section}{\numberline {5}ANALYSIS AND RESULTS}{13}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Analysis}{13}{subsection.5.1}%
+\contentsline {subsubsection}{\numberline {5.1.1}Data}{13}{subsubsection.5.1.1}%
+\contentsline {subsubsection}{\numberline {5.1.2}Data pipeline and validation}{13}{subsubsection.5.1.2}%
+\contentsline {subsubsection}{\numberline {5.1.3}Cluster-first stage (balanced geographic clustering)}{13}{subsubsection.5.1.3}%
+\contentsline {subsubsection}{\numberline {5.1.4}Route-second stage (intra-cluster sequencing and travel metrics)}{14}{subsubsection.5.1.4}%
+\contentsline {subsection}{\numberline {5.2}Data pipeline and validation}{14}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Cluster-first stage (balanced geographic clustering)}{14}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}Route-second stage (intra-cluster sequencing and travel metrics)}{15}{subsection.5.4}%
+\contentsline {subsection}{\numberline {5.5}Mathematical Model}{15}{subsection.5.5}%
+\contentsline {subsubsection}{\numberline {5.5.1}Sets and Indices}{16}{subsubsection.5.5.1}%
+\contentsline {subsubsection}{\numberline {5.5.2}Parameters}{16}{subsubsection.5.5.2}%
+\contentsline {subsubsection}{\numberline {5.5.3}Decision Variables}{16}{subsubsection.5.5.3}%
+\contentsline {subsubsection}{\numberline {5.5.4}Objective Function}{17}{subsubsection.5.5.4}%
+\contentsline {subsubsection}{\numberline {5.5.5}Constraints}{17}{subsubsection.5.5.5}%
+\contentsline {paragraph}{Customer Assignment}{17}{paragraph*.2}%
+\contentsline {paragraph}{Vehicle Activation}{17}{paragraph*.3}%
+\contentsline {paragraph}{Flow Conservation}{17}{paragraph*.4}%
+\contentsline {paragraph}{Depot Constraints}{17}{paragraph*.5}%
+\contentsline {paragraph}{Stop Count Constraints}{17}{paragraph*.6}%
+\contentsline {paragraph}{Dynamic Capacity Constraints}{17}{paragraph*.7}%
+\contentsline {paragraph}{Time Feasibility}{18}{paragraph*.8}%
+\contentsline {paragraph}{MTZ Subtour Elimination}{18}{paragraph*.9}%
+\contentsline {subsection}{\numberline {5.6}Results}{18}{subsection.5.6}%
+\contentsline {section}{\numberline {6}DISCUSSIONS}{21}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Study limitations}{21}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Applicability of the project under real life situations}{21}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Health and Safety Issues}{22}{subsection.6.3}%
+\contentsline {subsubsection}{\numberline {6.3.1}Occupational Health Risks}{22}{subsubsection.6.3.1}%
+\contentsline {subsubsection}{\numberline {6.3.2}Public Health \& Safety}{22}{subsubsection.6.3.2}%
+\contentsline {subsubsection}{\numberline {6.3.3}Relevant UNSDGs:}{22}{subsubsection.6.3.3}%
+\contentsline {subsection}{\numberline {6.4}Legal Issues}{23}{subsection.6.4}%
+\contentsline {subsubsection}{\numberline {6.4.1}Regulatory Constraints and Compliance Risk}{23}{subsubsection.6.4.1}%
+\contentsline {subsubsection}{\numberline {6.4.2}Algorithmic Compliance by Design}{24}{subsubsection.6.4.2}%
+\contentsline {subsubsection}{\numberline {6.4.3}Data Protection and Regulatory Accountability}{24}{subsubsection.6.4.3}%
+\contentsline {subsubsection}{\numberline {6.4.4}Relevant UNSDGs}{24}{subsubsection.6.4.4}%
+\contentsline {subsection}{\numberline {6.5}Economical Issues and Constraints}{25}{subsection.6.5}%
+\contentsline {subsubsection}{\numberline {6.5.1}Cost structure and budget constraints}{25}{subsubsection.6.5.1}%
+\contentsline {subsubsection}{\numberline {6.5.2}ROI and business case logic}{25}{subsubsection.6.5.2}%
+\contentsline {subsubsection}{\numberline {6.5.3}Financial risk and sensitivity}{26}{subsubsection.6.5.3}%
+\contentsline {subsubsection}{\numberline {6.5.4}Relevant UNSDGs}{26}{subsubsection.6.5.4}%
+\contentsline {subsection}{\numberline {6.6}Sustainability Issues}{26}{subsection.6.6}%
+\contentsline {subsubsection}{\numberline {6.6.1}Environmental Sustainability}{26}{subsubsection.6.6.1}%
+\contentsline {subsubsection}{\numberline {6.6.2}Operational Sustainability}{27}{subsubsection.6.6.2}%
+\contentsline {subsubsection}{\numberline {6.6.3}Social Sustainability}{27}{subsubsection.6.6.3}%
+\contentsline {subsubsection}{\numberline {6.6.4}Rebound Effect}{27}{subsubsection.6.6.4}%
+\contentsline {subsubsection}{\numberline {6.6.5}Relevant UNSDGs}{27}{subsubsection.6.6.5}%
+\contentsline {subsection}{\numberline {6.7}Producibility-Manufacturability Issues}{28}{subsection.6.7}%
+\contentsline {subsubsection}{\numberline {6.7.1}Producibility as timely solution generation}{28}{subsubsection.6.7.1}%
+\contentsline {subsubsection}{\numberline {6.7.2}Manufacturability as deployability and sustainable operation}{28}{subsubsection.6.7.2}%
+\contentsline {subsubsection}{\numberline {6.7.3} SLA and operational trust}{29}{subsubsection.6.7.3}%
+\contentsline {subsubsection}{\numberline {6.7.4}Relevant UNSDGs}{29}{subsubsection.6.7.4}%
+\contentsline {subsection}{\numberline {6.8}Social and Political Issues}{29}{subsection.6.8}%
+\contentsline {paragraph}{İlgili UNSDG sub-target'lar}{30}{paragraph*.12}%
+\contentsline {subsubsection}{\numberline {6.8.1}Gender Equality}{30}{subsubsection.6.8.1}%
+\contentsline {paragraph}{İlgili UNSDG sub-target'lar}{30}{paragraph*.13}%
+\contentsline {subsection}{\numberline {6.9}Environmental Issues}{30}{subsection.6.9}%
+\contentsline {subsection}{\numberline {6.10}Multidisciplinary Collaboration}{31}{subsection.6.10}%
+\contentsline {section}{\numberline {7}CONCLUSIONS}{31}{section.7}%
+\contentsline {section}{\numberline {8}PROJECT PLAN AND FUTURE STUDIES}{32}{section.8}%
+\contentsline {subsection}{\numberline {.1}Appendix A, additional tables}{35}{subsection.Alph0.1}%
+\contentsline {subsection}{\numberline {.2}Appendix B, additional figures}{39}{subsection.Alph0.2}%
