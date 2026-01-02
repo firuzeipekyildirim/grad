@@ -1,7 +1,7 @@
 \contentsline {table}{\numberline {1}{\ignorespaces Stop-count statistics for the full Monday dataset and the pilot subset.}}{13}{table.caption.1}%
 \contentsline {table}{\numberline {2}{\ignorespaces Pilot Monday routing KPIs for the first 100 stops.}}{19}{table.caption.10}%
-\contentsline {table}{\numberline {3}{\ignorespaces Example route sequence for Monday cluster 0 (pilot on first 100 stops).}}{35}{table.3}%
-\contentsline {table}{\numberline {4}{\ignorespaces High-volume outlier stops in Monday data (Qty $>$ 350) requiring potential split-service handling.}}{35}{table.caption.14}%
-\contentsline {table}{\numberline {5}{\ignorespaces Sample pairwise travel distance matrix (km) for depot + 10 stops (Google Distance Matrix API).}}{36}{table.caption.15}%
-\contentsline {table}{\numberline {6}{\ignorespaces Sample pairwise travel duration-in-traffic matrix (min) for depot + 10 stops (Google Distance Matrix API).}}{37}{table.caption.16}%
-\contentsline {table}{\numberline {7}{\ignorespaces Sample pairwise travel duration-in-traffic matrix (min) for depot + 10 stops (Google Distance Matrix API).}}{38}{table.caption.17}%
+\contentsline {table}{\numberline {3}{\ignorespaces Example route sequence for Monday cluster 0 (pilot on first 100 stops).}}{36}{table.3}%
+\contentsline {table}{\numberline {4}{\ignorespaces High-volume outlier stops in Monday data (Qty $>$ 350) requiring potential split-service handling.}}{36}{table.caption.14}%
+\contentsline {table}{\numberline {5}{\ignorespaces Sample pairwise travel distance matrix (km) for depot + 10 stops (Google Distance Matrix API).}}{37}{table.caption.15}%
+\contentsline {table}{\numberline {6}{\ignorespaces Sample pairwise travel duration-in-traffic matrix (min) for depot + 10 stops (Google Distance Matrix API).}}{38}{table.caption.16}%
+\contentsline {table}{\numberline {7}{\ignorespaces Sample pairwise travel duration-in-traffic matrix (min) for depot + 10 stops (Google Distance Matrix API).}}{39}{table.caption.17}%

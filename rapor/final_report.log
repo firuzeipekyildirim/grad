@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.12.29)  2 JAN 2026 15:21
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.12.29)  2 JAN 2026 16:07
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -436,24 +436,24 @@ File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
 ) (final_report.aux)
 \openout1 = `final_report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 66.
-LaTeX Font Info:    ... okay on input line 66.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 66.
-LaTeX Font Info:    ... okay on input line 66.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 66.
-LaTeX Font Info:    ... okay on input line 66.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 66.
-LaTeX Font Info:    ... okay on input line 66.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 66.
-LaTeX Font Info:    ... okay on input line 66.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 66.
-LaTeX Font Info:    ... okay on input line 66.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 66.
-LaTeX Font Info:    ... okay on input line 66.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 66.
-LaTeX Font Info:    ... okay on input line 66.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 66.
-LaTeX Font Info:    ... okay on input line 66.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -508,13 +508,13 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 48
  (C:/Users/Ipek/AppData/Local/Programs/MiKTeX\tex/latex\00miktex\epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-LaTeX Info: Redefining \microtypecontext on input line 66.
-Package microtype Info: Applying patch `item' on input line 66.
-Package microtype Info: Applying patch `toc' on input line 66.
-Package microtype Info: Applying patch `eqnum' on input line 66.
-Package microtype Info: Applying patch `footnote' on input line 66.
-Package microtype Info: Applying patch `verbatim' on input line 66.
-LaTeX Info: Redefining \microtypesetup on input line 66.
+LaTeX Info: Redefining \microtypecontext on input line 61.
+Package microtype Info: Applying patch `item' on input line 61.
+Package microtype Info: Applying patch `toc' on input line 61.
+Package microtype Info: Applying patch `eqnum' on input line 61.
+Package microtype Info: Applying patch `footnote' on input line 61.
+Package microtype Info: Applying patch `verbatim' on input line 61.
+LaTeX Info: Redefining \microtypesetup on input line 61.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -525,20 +525,20 @@ Package microtype Info: No adjustment of character kerning.
  (C:/Users/Ipek/AppData/Local/Programs/MiKTeX\tex/latex\microtype\mt-cmr.cfg
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman (RS)
 )
-Package hyperref Info: Link coloring OFF on input line 66.
+Package hyperref Info: Link coloring OFF on input line 61.
  (final_report.out) (final_report.out)
 \@outlinefile=\write3
 \openout3 = `final_report.out'.
 
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 94.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 89.
  (C:/Users/Ipek/AppData/Local/Programs/MiKTeX\tex/latex\amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 ) (C:/Users/Ipek/AppData/Local/Programs/MiKTeX\tex/latex\microtype\mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 94.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 89.
  (C:/Users/Ipek/AppData/Local/Programs/MiKTeX\tex/latex\amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) (C:/Users/Ipek/AppData/Local/Programs/MiKTeX\tex/latex\microtype\mt-msb.cfg
@@ -566,25 +566,25 @@ File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.190 
+l.188 
        [1
 
 ] [2]
-Overfull \hbox (48.49239pt too wide) in paragraph at lines 219--244
+Overfull \hbox (48.49239pt too wide) in paragraph at lines 217--242
 \T1/cmr/m/n/12 the clas-si-cal Ve-hi-cleR-out-ing-Prob-lem(VRP),whichformsthefoundationofmanymodernroutingmodels.
  []
 
 [3
 
 ] [4]
-Overfull \hbox (4.97704pt too wide) in paragraph at lines 279--280
+Overfull \hbox (4.97704pt too wide) in paragraph at lines 277--278
 []\T1/cmr/m/n/12 Maintain op-er-a-tional fea-si-bil-ity by gen-er-at-ing ge-o-graph-i-cally com-pact routes through
  []
 
 [5] [6] [7] [8] [9
 
 ] [10] [11] [12] (assets/tables/tabledatasetsummary.tex)
-Overfull \hbox (17.40672pt too wide) in paragraph at lines 466--467
+Overfull \hbox (17.40672pt too wide) in paragraph at lines 464--465
 \T1/cmr/m/n/12 The op-er-a-tional dataset con-tains stop iden-ti-fiers, ge-o-graphic co-or-di-nates (lon-gi-tude/latitude),
  []
 
@@ -592,77 +592,69 @@ Overfull \hbox (17.40672pt too wide) in paragraph at lines 466--467
 
 ]
 
-LaTeX Warning: Reference `tab:sample10_traf_min' on page 1 undefined on input line 476.
+LaTeX Warning: Reference `tab:sample10_traf_min' on page 1 undefined on input line 474.
 
 
-Overfull \hbox (17.40672pt too wide) in paragraph at lines 482--483
+Overfull \hbox (17.40672pt too wide) in paragraph at lines 480--481
 \T1/cmr/m/n/12 The op-er-a-tional dataset con-tains stop iden-ti-fiers, ge-o-graphic co-or-di-nates (lon-gi-tude/latitude),
  []
 
 [14]
 
-LaTeX Warning: Reference `tab:sample10_traf_min' on page 1 undefined on input line 492.
+LaTeX Warning: Reference `tab:sample10_traf_min' on page 1 undefined on input line 490.
 
-[15] [16] [17] (assets/tables/tablepilotkpisfirst100.tex)
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[18]
-<assets/figs/cluster_plot_first100.png, id=594, 462.528pt x 346.896pt>
+[15] [16] [17] [18] (assets/tables/tablepilotkpisfirst100.tex) [19]
+<assets/figs/cluster_plot_first100.png, id=602, 462.528pt x 346.896pt>
 File: assets/figs/cluster_plot_first100.png Graphic file (type png)
 <use assets/figs/cluster_plot_first100.png>
-Package pdftex.def Info: assets/figs/cluster_plot_first100.png  used on input line 645.
+Package pdftex.def Info: assets/figs/cluster_plot_first100.png  used on input line 675.
 (pdftex.def)             Requested size: 385.02547pt x 288.7811pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[19] [20 <./assets/figs/cluster_plot_first100.png>] [21
+ [20 <./assets/figs/cluster_plot_first100.png>] [21] [22
 
 ]
-Overfull \hbox (7.81116pt too wide) in paragraph at lines 693--694
+Overfull \hbox (7.81116pt too wide) in paragraph at lines 740--741
 \T1/cmr/m/n/12 From a broader pub-lic safety per-spec-tive, op-ti-mized rout-ing re-duces to-tal vehicle-kilometers
  []
 
-[22] [23] [24] [25] [26] [27] [28] [29] [30]
-Overfull \hbox (5.77837pt too wide) in paragraph at lines 891--892
+[23] [24] [25] [26] [27] [28] [29] [30] [31]
+Overfull \hbox (5.77837pt too wide) in paragraph at lines 937--938
 \T1/cmr/m/n/12 end: defin-ing prob-lem scope, prepar-ing in-puts, val-i-dat-ing out-puts, gen-er-at-ing KPIs/figures,
  []
 
-[31] [32
+[32] [33
 
 ] (final_report.bbl
 Underfull \hbox (badness 1077) in paragraph at lines 42--47
 []\T1/cmr/m/n/12 E. E. Halvorsen-Weare and M. W. P. Savels-bergh, ``Labour-constrained and
  []
 
-[33
+[34
 
-]) [34] (assets/tables/tablerouteseqcluster0longtable.tex) (assets/tables/tableqtyoutliersmon.tex) (assets/tables/tablesample10distancekm.tex [35
+]) [35] (assets/tables/tablerouteseqcluster0longtable.tex) (assets/tables/tableqtyoutliersmon.tex) (assets/tables/tablesample10distancekm.tex [36
 
-] [36]) (assets/tables/tablsample10durationtrafficmin.tex [37]) (assets/tables/tablesample10durationmin.tex [38])
-<assets/figs/kpi_total_km_first100.png, id=719, 462.528pt x 346.896pt>
+] [37]) (assets/tables/tablsample10durationtrafficmin.tex [38]) (assets/tables/tablesample10durationmin.tex [39])
+<assets/figs/kpi_total_km_first100.png, id=728, 462.528pt x 346.896pt>
 File: assets/figs/kpi_total_km_first100.png Graphic file (type png)
 <use assets/figs/kpi_total_km_first100.png>
-Package pdftex.def Info: assets/figs/kpi_total_km_first100.png  used on input line 963.
+Package pdftex.def Info: assets/figs/kpi_total_km_first100.png  used on input line 1009.
 (pdftex.def)             Requested size: 385.02547pt x 288.7811pt.
-<assets/figs/kpi_total_min_first100.png, id=720, 462.528pt x 346.896pt>
+<assets/figs/kpi_total_min_first100.png, id=729, 462.528pt x 346.896pt>
 File: assets/figs/kpi_total_min_first100.png Graphic file (type png)
 <use assets/figs/kpi_total_min_first100.png>
-Package pdftex.def Info: assets/figs/kpi_total_min_first100.png  used on input line 970.
+Package pdftex.def Info: assets/figs/kpi_total_min_first100.png  used on input line 1016.
 (pdftex.def)             Requested size: 385.02547pt x 288.7811pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[39
+[40
 
 
 
 
 
 
- <./assets/figs/kpi_total_km_first100.png>] [40 <./assets/figs/kpi_total_min_first100.png>] (final_report.aux)
+ <./assets/figs/kpi_total_km_first100.png>] [41 <./assets/figs/kpi_total_min_first100.png>] (final_report.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-11-06>
@@ -672,20 +664,20 @@ L3 programming layer <2025-11-06>
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `final_report.out' has not changed.
-(rerunfilecheck)             Checksum: 57093FBA22F9AA5C78FA4ED8800B9E21;15630.
+(rerunfilecheck)             Checksum: 2752A031084B178C02A06A637677289C;15910.
  ) 
 Here is how much of TeX's memory you used:
  17808 strings out of 467871
- 300666 string characters out of 5418859
+ 300689 string characters out of 5418859
  782673 words of memory out of 5000000
- 46253 multiletter control sequences out of 15000+600000
+ 46251 multiletter control sequences out of 15000+600000
  643334 words of font info for 77 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  69i,11n,83p,2626b,590s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\İpek\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecti1200.pk> <C:\Users\İpek\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1440.pk> <C:\Users\İpek\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1200.pk> <C:\Users\İpek\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1095.pk> <C:\Users\İpek\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1095.pk> <C:\Users\İpek\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1200.pk> <C:\Users\İpek\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1200.pk> <C:\Users\İpek\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1728.pk><C:/Users/Ipek/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/Ipek/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/Ipek/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/Ipek/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/Ipek/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/Ipek/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Ipek/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on final_report.pdf (49 pages, 531320 bytes).
+Output written on final_report.pdf (50 pages, 532285 bytes).
 PDF statistics:
- 1239 PDF objects out of 1440 (max. 8388607)
- 178 named destinations out of 1000 (max. 500000)
- 9312 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1240 PDF objects out of 1440 (max. 8388607)
+ 180 named destinations out of 1000 (max. 500000)
+ 9320 words of extra memory for PDF output out of 10000 (max. 10000000)
 

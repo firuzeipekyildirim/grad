@@ -56,11 +56,6 @@ em]{#1}}\hspace{0.6em}}
 \newcommand{\PresentationDate}{Date of Presentation Here}
 \newcommand{\CityCountry}{Ankara / TURKEY}
 
-% Student list (alphabetical by last name)
-\newcommand{\StudentA}{Student Name Surname (ID)}
-\newcommand{\StudentB}{Student Name Surname (ID)}
-\newcommand{\StudentC}{Student Name Surname (ID)}
-% add more if needed
 
 % ---------- Document ----------
 \begin{document}
@@ -91,12 +86,12 @@ em]{#1}}\hspace{0.6em}}
 
 \vspace{1cm}
 
-\begin{tabular}{l c}
-\textbf{IŞIL ÇAKIR} & 2230469118 \\
+\begin{tabular}{l l c}
+\textbf{ÇAKIR} &  \textbf{IŞIL} & 2230469118 \\
 \\
-\textbf{MUSTAFA ALP ULAŞ} & 2210469034 \\
+\textbf{ULAŞ} &  \textbf{MUSTAFA ALP} & 2210469034 \\
 \\
-\textbf{FİRUZE İPEK YILDIRIM} & 2220469028 \\
+\textbf{YILDIRIM} &  \textbf{FİRUZE İPEK} & 2220469028 \\
 \end{tabular}
 
 \vspace{2cm}
@@ -157,6 +152,9 @@ A pilot experiment on the first 100 Monday stops demonstrates spatially coherent
     \item MILP: Mixed-Integer Linear Programming
     \item MTZ: Miller--Tucker--Zemlin
     \item UNSDG: United Nations Sustainable Development Goals
+    \item SDG: Sustainable Development Goals
+    \item VKT: Vehicle-Kilometers Traveled
+    \item KPI: Key Performance Indicator
 \end{itemize}
 
 \clearpage
@@ -495,14 +493,16 @@ Route-level KPIs are computed as the sum of arc costs along the ordered sequence
 
 \subsection{Mathematical Model}
 
-This study addresses the \textit{Vehicle Routing Problem with Simultaneous Pickup and Delivery (VRPSPD)} and extends the classical formulation by integrating a prioritized penalty-based cost structure. The proposed model simultaneously determines optimal vehicle routes, customer assignments, and vehicle usage decisions while accounting for delivery priorities and delivery delays.
 
-Customers are classified into two delivery types: \textit{normal} and \textit{express}. Express customers represent high-priority deliveries and are therefore associated with a higher penalty weight even when served on time. In addition, if a delivery is not completed within the planning horizon, a backlog (delay) penalty is applied. This delay penalty is dominant for express customers. Consequently, the model automatically enforces the following priority order within the objective function:
-\[
-\text{delayed express} > \text{express} > \text{delayed normal} > \text{normal}.
-\]
+The proposed optimization model is formulated as a Capacitated Vehicle Routing Problem
+with Simultaneous Pickup and Delivery (VRPSPD) and incorporates a priority-based penalty
+mechanism. The model is used as the analytical foundation to evaluate the impact of
+delivery priorities on routing decisions, fleet utilization, and service feasibility.
 
-Vehicles start their routes from a single depot and are required to return to the depot at the end of their routes. The fleet size is flexible, and a fixed cost is incurred only for the vehicles that are activated. Vehicle loads dynamically change along the route: deliveries decrease the load, while pickups increase it, and capacity limits are respected at all times. Subtours are eliminated using Miller--Tucker--Zemlin (MTZ) constraints.
+The prioritized penalty structure embedded in the objective function ensures that delayed
+express deliveries incur the highest cost, followed by express, delayed normal, and normal
+deliveries. This structure directly influences the resulting routes and vehicle assignments,
+which are analyzed in the following sections.
 
 \subsubsection{Sets and Indices}
 
@@ -527,7 +527,7 @@ Vehicles start their routes from a single depot and are required to return to th
     \item $\beta$: Backlog (delay) penalty coefficient, where $\beta \gg \alpha$.
     \item $M$: A sufficiently large constant.
 \end{itemize}
-s
+
 \subsubsection{Decision Variables}
 
 \begin{itemize}
@@ -554,7 +554,19 @@ The objective function minimizes the total operational cost, which consists of t
 \right]
 \end{equation}
 
-The first term represents the total traveled distance, the second term accounts for vehicle activation costs, and the third term introduces prioritized penalties for express customers and delayed (backlogged) deliveries.
+The first term represents the total distance traveled by all vehicles.
+The second term penalizes the use of additional vehicles, encouraging fleet efficiency.
+The third term introduces a prioritized penalty structure, where express customers
+($E_i = 1$) incur an additional priority cost $\alpha$, while customers that remain
+unserved within the planning horizon incur a backlog penalty $\beta$, with $\beta \gg \alpha$.
+
+This structure ensures the following priority order:
+\[
+\text{delayed express} > \text{express} > \text{delayed normal} > \text{normal}.
+\]
+
+This structure directly affects routing decisions by prioritizing express
+and delayed deliveries under capacity and operational constraints.
 
 \subsubsection{Constraints}
 
@@ -563,10 +575,14 @@ The first term represents the total traveled distance, the second term accounts 
 \sum_{k \in K} y_{ik} \le 1 \quad \forall i \in C
 \end{equation}
 
+Only one vehicle can be used in attending to each customer to prevent duplication.
+
 \paragraph{Vehicle Activation}
 \begin{equation}
 y_{ik} \le z_k \quad \forall i \in C, k \in K
 \end{equation}
+
+The vehicle comes into effect as a serves-one-customer vehicle, thus determining that fixed costs are only charged based on the utilization of the vehicles.
 
 \paragraph{Flow Conservation}
 \begin{equation}
@@ -579,6 +595,8 @@ y_{ik} \le z_k \quad \forall i \in C, k \in K
 \quad \forall j \in C, k \in K
 \end{equation}
 
+These constraints ensure route continuity by guaranteeing only one incoming and one outgoing arc to all visited customers.
+
 \paragraph{Depot Constraints}
 \begin{equation}
 \sum_{j \in C} x_{0jk} = z_k
@@ -590,11 +608,16 @@ y_{ik} \le z_k \quad \forall i \in C, k \in K
 \quad \forall k \in K
 \end{equation}
 
+Any given vehicle that starts must start from the depot and return after finishing his duty.
+
 \paragraph{Stop Count Constraints}
 \begin{equation}
 80 z_k \le \sum_{i \in C} y_{ik} \le 110 z_k
 \quad \forall k \in K
 \end{equation}
+
+These constraints limit the number of customers served by each vehicle to a
+predefined operational interval.
 
 \paragraph{Dynamic Capacity Constraints}
 \begin{equation}
@@ -607,11 +630,17 @@ q_{jk} \ge q_{ik} - D_j + P_j - M(1 - x_{ijk})
 \quad \forall i \in N, k \in K
 \end{equation}
 
+These constraints ensure that vehicle loads dynamically decrease due to
+deliveries and increase due to pickups, while always remaining within capacity limits.
+
 \paragraph{Time Feasibility}
 \begin{equation}
 t_{jk} \ge t_{ik} + s_i + t_{ij} - M(1 - x_{ijk})
 \quad \forall i,j \in N, k \in K
 \end{equation}
+
+These constraints ensure temporal feasibility by accounting for travel times
+and service durations along each route.
 
 \paragraph{MTZ Subtour Elimination}
 \begin{equation}
@@ -624,6 +653,8 @@ u_{ik} - u_{jk} + |C| x_{ijk} \le |C| - 1
 \quad \forall i \in C, k \in K
 \end{equation}
 
+The Miller–Tucker–Zemlin (MTZ) constraints prevent the formation of subtours
+disconnected from the depot, ensuring a single continuous route for each vehicle.
 
 \subsection{Results}
 
@@ -639,7 +670,6 @@ The performance metrics for the initial routing phase are summarized in \cref{ta
 Furthermore, it should be noted that the distance and travel time calculations were performed using the Google Distance Matrix API \cite{GoogleDistanceMatrixAPI}. Due to the daily quota limits of the free-tier service, the current analysis is conducted on this representative pilot dataset of the first 100 stops. These results serve as a preliminary validation of the digital optimization model, aligning with SDG 9.4 by aiming to increase resource efficiency through technological integration. Future work will focus on scaling these optimizations to the full dataset by incorporating modified clustering constraints and extended API resources.
 
 
-
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.85\textwidth]{assets/figs/cluster_plot_first100.png}
@@ -651,7 +681,24 @@ As seen in \cref{fig:cluster_first100}, the green points representing Cluster 2 
 
 These findings align with SDG 9.4, as identifying such digital optimization gaps is the first step toward developing more resource-efficient infrastructure. Addressing these clustering anomalies through heuristic modifications will be essential to ensure that each route maintains an optimal workload, thereby reducing unnecessary vehicle wear and fuel consumption.
 
+\subsubsection{Expected Outcomes and Model Capabilities}
 
+While the suggested model has not been solved by computation, its structure provides an actual guess of the output and insights that could be obtained after solving it with any solver, like Gurobi.
+
+The solution will likely provide, after its determination, perfect routes for each active vehicle, detailing the sequence through which customers are visited by the depot and vice versa. Additionally, the model will provide the minimum number of vehicles and the distribution of customers to the vehicles according to the operating and capacity limits.
+
+The expected quantitative outputs of the model are total traveled distance, number of activated vehicles, vehicle-level load profiles, and the number of served and unserved customers. These outputs enable an evaluation of transportation efficiency and service feasibility under different demand compositions.
+
+Due to the embedded priority-based penalty structure, the model is expected to clearly
+differentiate between express and normal deliveries. Express customers are anticipated
+to be served with higher priority, potentially resulting in longer routes or additional
+vehicle deployment when necessary to avoid high backlog penalties.
+
+From a practical standpoint, the expected outputs of the model can support UPS decision
+makers in evaluating trade-offs between service quality and operational cost. By
+adjusting the penalty parameters, managers can explore alternative operational
+strategies and assess the cost implications of stricter or more flexible service
+priorities before implementation.
 
 % Example figure block:
 % \begin{figure}[h]
@@ -856,28 +903,27 @@ If the service is slow or produces inconsistent outputs, dispatchers will revert
 \end{itemize}
 
 \subsection{Social and Political Issues}
-Bu projede rota planlama, bu koşulları bir miktar daha yönetilebilir yapma şansı veriyor. Örneğin rotaları mümkün olduğunca gündüz saatlerine toplamak, yük ve durak yoğunluğunu makul seviyede tutmak, bugün kaçta biter sorusuna daha net cevap verebilen öngörülebilir planlar üretmek kadın sürücüler için giriş bariyerini düşürür. Phung ve Olapiriyakul'un yaklaşımı da rota tasarımında sadece maliyet ve mesafe değil, güvenlik ve öngörülebilirlik gibi sosyal değişkenlerin de hesaba katılabileceğini gösterir~\cite{Phung2022}.
+In this project, route planning offers the opportunity to make these conditions somewhat more manageable. For example, concentrating routes as much as possible during daytime hours, keeping load and stop density at reasonable levels, and producing predictable plans that provide clearer answers to questions like “What time will it finish today?” lowers the entry barrier for female drivers. Phung and Olapiriyakul's approach also demonstrates that route design can take into account not only cost and distance, but also social variables such as safety and predictability.~\cite{Phung2022}.
 
 
-Rota kararları sadece maliyetle ilgili değildir. İnsanların gündelik hayatına doğrudan dokunur. Sadece maliyeti düşürmeye odaklanan optimizasyon, doğal olarak yoğun ve ulaşımı kolay bölgeleri avantajlı görür. Bu da uzakta kalan, dağınık yerleşimli ya da düşük gelirli mahallelerin daha geç hizmet almasına, bazen de sistematik olarak geri plana itilmesine yol açabilir~\cite{Bonku2024}.
+Route decisions are not solely about cost. They directly impact people's daily lives. Optimization focused solely on reducing costs naturally favors densely populated and easily accessible areas. This can lead to remote, scattered, or low-income neighborhoods receiving services later, and sometimes being systematically marginalized.~\cite{Bonku2024}.
 
-Bu durum çoğu zaman kötü niyetle olmaz. Algoritma sadece en ucuz yolu seçer. Ama sonuç yine de adaletsiz olabilir. Bu yüzden düzeltici mekanizmalar olmadan, rota planlama sistemi eşitsizliği büyütebilir. Örneğin hizmetin her bölgeye belirli bir minimum seviyede gitmesini zorunlu kılan kurallar koymak, ya da dezavantajlı bölgeleri tamamen gözden düşürmeyecek bir ağırlıklandırma yapmak gerekir. Aksi halde sistem, verimli görünürken bazı insanların hizmete erişimini görünmez biçimde zorlaştırır.
-
-\paragraph{İlgili UNSDG sub-target'lar}
+This situation is often not intentional. The algorithm simply chooses the cheapest route. But the result can still be unfair. Therefore, without corrective mechanisms, the route planning system can increase inequality. For example, rules must be established that require the service to reach every region at a certain minimum level, or a weighting system must be implemented that does not completely overlook disadvantaged areas. Otherwise, while the system may appear efficient, it invisibly makes access to the service more difficult for some people.
+\paragraph{Relevant UNSDGs}
 \begin{itemize}
-    \item \textbf{SDG 10.2 (Primary):} 2030'a kadar herkesin sosyal ve ekonomik olarak kapsanmasını ve dahil edilmesini güçlendirmek~\cite{UN2015}.
-    \item \textbf{SDG 10.3 (Secondary):} Sonuçlardaki eşitsizliği azaltmak ve eşit fırsatı güvence altına almak~\cite{UN2015}.
+    \item \textbf{SDG 10.2 (Primary):} Strengthen the social and economic inclusion of all by 2030~\cite{UN2015}.
+    \item \textbf{SDG 10.3 (Secondary):} Reducing inequality in outcomes and ensuring equal opportunity~\cite{UN2015}.
 \end{itemize}
 
 \subsubsection{Gender Equality}
-Burada dürüst olmak gerekiyor. Bu tür düzenlemeler bazen verimlilikten küçük bir pay alabilir. Daha kısa rota yerine daha güvenli saat, daha kolay yük, daha dengeli tempo seçmek her zaman en ucuz sonuç değildir. Ama bu, sistemin sadece şirket için değil, çalışan için de çalışmasını sağlar. Amaç kadınlara ayrıcalık vermek değil; işi herkes için daha erişilebilir ve sürdürülebilir bir hale getirmektir.
+We need to be honest here. Such arrangements can sometimes take a small toll on efficiency. Choosing safer hours, easier loads, and a more balanced pace over a shorter route is not always the cheapest option. But this ensures that the system works not only for the company but also for the employee. The goal is not to give women special privileges; it is to make the job more accessible and sustainable for everyone.
 
-Bir sınır daha var: SDG 5'i sadece algoritmayla çözemeyiz. Rota optimizasyonu koşulları iyileştirebilir ama tek başına yeterli değildir. Kurumsal güvenlik prosedürleri, eğitim, ekipman desteği ve uygulama disiplinleri olmadan bu hedefe yaklaşmak zor olur~\cite{Phung2022}.
+There is another limitation: we cannot solve SDG 5 with algorithms alone. Route optimization can improve conditions, but it is not sufficient on its own. Without corporate security procedures, training, equipment support, and implementation discipline, it will be difficult to achieve this goal~\cite{Phung2022}.
 
-\paragraph{İlgili UNSDG sub-target'lar}
+\paragraph{Relevant UNSDGs}
 \begin{itemize}
-    \item \textbf{SDG 5.5 (Primary):} Kadınların tam ve etkin katılımını ve karar alma dahil her düzeyde eşit fırsatlarını güvence altına almak~\cite{UN2015}.
-    \item \textbf{SDG 5.2 (Secondary):} Kadınlara yönelik şiddetin tüm biçimlerini ortadan kaldırmak; güvenlik risklerini azaltan tasarım kararları bu hedefle uyumludur~\cite{UN2015}.
+    \item \textbf{SDG 5.5 (Primary):} Ensuring women's full and effective participation and equal opportunities at all levels, including in decision-making~\cite{UN2015}.
+    \item \textbf{SDG 5.2 (Secondary):} Eliminating all forms of violence against women; design decisions that reduce security risks are consistent with this goal~\cite{UN2015}.
 \end{itemize}
 
 \subsection{Environmental Issues}

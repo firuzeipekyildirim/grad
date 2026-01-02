@@ -30,55 +30,56 @@
 \contentsline {subsection}{\numberline {5.3}Cluster-first stage (balanced geographic clustering)}{14}{subsection.5.3}%
 \contentsline {subsection}{\numberline {5.4}Route-second stage (intra-cluster sequencing and travel metrics)}{15}{subsection.5.4}%
 \contentsline {subsection}{\numberline {5.5}Mathematical Model}{15}{subsection.5.5}%
-\contentsline {subsubsection}{\numberline {5.5.1}Sets and Indices}{16}{subsubsection.5.5.1}%
+\contentsline {subsubsection}{\numberline {5.5.1}Sets and Indices}{15}{subsubsection.5.5.1}%
 \contentsline {subsubsection}{\numberline {5.5.2}Parameters}{16}{subsubsection.5.5.2}%
 \contentsline {subsubsection}{\numberline {5.5.3}Decision Variables}{16}{subsubsection.5.5.3}%
-\contentsline {subsubsection}{\numberline {5.5.4}Objective Function}{17}{subsubsection.5.5.4}%
+\contentsline {subsubsection}{\numberline {5.5.4}Objective Function}{16}{subsubsection.5.5.4}%
 \contentsline {subsubsection}{\numberline {5.5.5}Constraints}{17}{subsubsection.5.5.5}%
 \contentsline {paragraph}{Customer Assignment}{17}{paragraph*.2}%
 \contentsline {paragraph}{Vehicle Activation}{17}{paragraph*.3}%
 \contentsline {paragraph}{Flow Conservation}{17}{paragraph*.4}%
 \contentsline {paragraph}{Depot Constraints}{17}{paragraph*.5}%
-\contentsline {paragraph}{Stop Count Constraints}{17}{paragraph*.6}%
-\contentsline {paragraph}{Dynamic Capacity Constraints}{17}{paragraph*.7}%
+\contentsline {paragraph}{Stop Count Constraints}{18}{paragraph*.6}%
+\contentsline {paragraph}{Dynamic Capacity Constraints}{18}{paragraph*.7}%
 \contentsline {paragraph}{Time Feasibility}{18}{paragraph*.8}%
 \contentsline {paragraph}{MTZ Subtour Elimination}{18}{paragraph*.9}%
 \contentsline {subsection}{\numberline {5.6}Results}{18}{subsection.5.6}%
-\contentsline {section}{\numberline {6}DISCUSSIONS}{21}{section.6}%
-\contentsline {subsection}{\numberline {6.1}Study limitations}{21}{subsection.6.1}%
-\contentsline {subsection}{\numberline {6.2}Applicability of the project under real life situations}{21}{subsection.6.2}%
-\contentsline {subsection}{\numberline {6.3}Health and Safety Issues}{22}{subsection.6.3}%
-\contentsline {subsubsection}{\numberline {6.3.1}Occupational Health Risks}{22}{subsubsection.6.3.1}%
-\contentsline {subsubsection}{\numberline {6.3.2}Public Health \& Safety}{22}{subsubsection.6.3.2}%
-\contentsline {subsubsection}{\numberline {6.3.3}Relevant UNSDGs:}{22}{subsubsection.6.3.3}%
-\contentsline {subsection}{\numberline {6.4}Legal Issues}{23}{subsection.6.4}%
-\contentsline {subsubsection}{\numberline {6.4.1}Regulatory Constraints and Compliance Risk}{23}{subsubsection.6.4.1}%
-\contentsline {subsubsection}{\numberline {6.4.2}Algorithmic Compliance by Design}{24}{subsubsection.6.4.2}%
-\contentsline {subsubsection}{\numberline {6.4.3}Data Protection and Regulatory Accountability}{24}{subsubsection.6.4.3}%
-\contentsline {subsubsection}{\numberline {6.4.4}Relevant UNSDGs}{24}{subsubsection.6.4.4}%
-\contentsline {subsection}{\numberline {6.5}Economical Issues and Constraints}{25}{subsection.6.5}%
-\contentsline {subsubsection}{\numberline {6.5.1}Cost structure and budget constraints}{25}{subsubsection.6.5.1}%
-\contentsline {subsubsection}{\numberline {6.5.2}ROI and business case logic}{25}{subsubsection.6.5.2}%
-\contentsline {subsubsection}{\numberline {6.5.3}Financial risk and sensitivity}{26}{subsubsection.6.5.3}%
-\contentsline {subsubsection}{\numberline {6.5.4}Relevant UNSDGs}{26}{subsubsection.6.5.4}%
-\contentsline {subsection}{\numberline {6.6}Sustainability Issues}{26}{subsection.6.6}%
-\contentsline {subsubsection}{\numberline {6.6.1}Environmental Sustainability}{26}{subsubsection.6.6.1}%
-\contentsline {subsubsection}{\numberline {6.6.2}Operational Sustainability}{27}{subsubsection.6.6.2}%
-\contentsline {subsubsection}{\numberline {6.6.3}Social Sustainability}{27}{subsubsection.6.6.3}%
-\contentsline {subsubsection}{\numberline {6.6.4}Rebound Effect}{27}{subsubsection.6.6.4}%
-\contentsline {subsubsection}{\numberline {6.6.5}Relevant UNSDGs}{27}{subsubsection.6.6.5}%
-\contentsline {subsection}{\numberline {6.7}Producibility-Manufacturability Issues}{28}{subsection.6.7}%
-\contentsline {subsubsection}{\numberline {6.7.1}Producibility as timely solution generation}{28}{subsubsection.6.7.1}%
-\contentsline {subsubsection}{\numberline {6.7.2}Manufacturability as deployability and sustainable operation}{28}{subsubsection.6.7.2}%
-\contentsline {subsubsection}{\numberline {6.7.3} SLA and operational trust}{29}{subsubsection.6.7.3}%
-\contentsline {subsubsection}{\numberline {6.7.4}Relevant UNSDGs}{29}{subsubsection.6.7.4}%
-\contentsline {subsection}{\numberline {6.8}Social and Political Issues}{29}{subsection.6.8}%
-\contentsline {paragraph}{İlgili UNSDG sub-target'lar}{30}{paragraph*.12}%
-\contentsline {subsubsection}{\numberline {6.8.1}Gender Equality}{30}{subsubsection.6.8.1}%
-\contentsline {paragraph}{İlgili UNSDG sub-target'lar}{30}{paragraph*.13}%
-\contentsline {subsection}{\numberline {6.9}Environmental Issues}{30}{subsection.6.9}%
-\contentsline {subsection}{\numberline {6.10}Multidisciplinary Collaboration}{31}{subsection.6.10}%
-\contentsline {section}{\numberline {7}CONCLUSIONS}{31}{section.7}%
-\contentsline {section}{\numberline {8}PROJECT PLAN AND FUTURE STUDIES}{32}{section.8}%
-\contentsline {subsection}{\numberline {.1}Appendix A, additional tables}{35}{subsection.Alph0.1}%
-\contentsline {subsection}{\numberline {.2}Appendix B, additional figures}{39}{subsection.Alph0.2}%
+\contentsline {subsubsection}{\numberline {5.6.1}Expected Outcomes and Model Capabilities}{20}{subsubsection.5.6.1}%
+\contentsline {section}{\numberline {6}DISCUSSIONS}{22}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Study limitations}{22}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Applicability of the project under real life situations}{22}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Health and Safety Issues}{23}{subsection.6.3}%
+\contentsline {subsubsection}{\numberline {6.3.1}Occupational Health Risks}{23}{subsubsection.6.3.1}%
+\contentsline {subsubsection}{\numberline {6.3.2}Public Health \& Safety}{23}{subsubsection.6.3.2}%
+\contentsline {subsubsection}{\numberline {6.3.3}Relevant UNSDGs:}{23}{subsubsection.6.3.3}%
+\contentsline {subsection}{\numberline {6.4}Legal Issues}{24}{subsection.6.4}%
+\contentsline {subsubsection}{\numberline {6.4.1}Regulatory Constraints and Compliance Risk}{24}{subsubsection.6.4.1}%
+\contentsline {subsubsection}{\numberline {6.4.2}Algorithmic Compliance by Design}{25}{subsubsection.6.4.2}%
+\contentsline {subsubsection}{\numberline {6.4.3}Data Protection and Regulatory Accountability}{25}{subsubsection.6.4.3}%
+\contentsline {subsubsection}{\numberline {6.4.4}Relevant UNSDGs}{25}{subsubsection.6.4.4}%
+\contentsline {subsection}{\numberline {6.5}Economical Issues and Constraints}{26}{subsection.6.5}%
+\contentsline {subsubsection}{\numberline {6.5.1}Cost structure and budget constraints}{26}{subsubsection.6.5.1}%
+\contentsline {subsubsection}{\numberline {6.5.2}ROI and business case logic}{26}{subsubsection.6.5.2}%
+\contentsline {subsubsection}{\numberline {6.5.3}Financial risk and sensitivity}{27}{subsubsection.6.5.3}%
+\contentsline {subsubsection}{\numberline {6.5.4}Relevant UNSDGs}{27}{subsubsection.6.5.4}%
+\contentsline {subsection}{\numberline {6.6}Sustainability Issues}{27}{subsection.6.6}%
+\contentsline {subsubsection}{\numberline {6.6.1}Environmental Sustainability}{27}{subsubsection.6.6.1}%
+\contentsline {subsubsection}{\numberline {6.6.2}Operational Sustainability}{28}{subsubsection.6.6.2}%
+\contentsline {subsubsection}{\numberline {6.6.3}Social Sustainability}{28}{subsubsection.6.6.3}%
+\contentsline {subsubsection}{\numberline {6.6.4}Rebound Effect}{28}{subsubsection.6.6.4}%
+\contentsline {subsubsection}{\numberline {6.6.5}Relevant UNSDGs}{28}{subsubsection.6.6.5}%
+\contentsline {subsection}{\numberline {6.7}Producibility-Manufacturability Issues}{29}{subsection.6.7}%
+\contentsline {subsubsection}{\numberline {6.7.1}Producibility as timely solution generation}{29}{subsubsection.6.7.1}%
+\contentsline {subsubsection}{\numberline {6.7.2}Manufacturability as deployability and sustainable operation}{29}{subsubsection.6.7.2}%
+\contentsline {subsubsection}{\numberline {6.7.3} SLA and operational trust}{30}{subsubsection.6.7.3}%
+\contentsline {subsubsection}{\numberline {6.7.4}Relevant UNSDGs}{30}{subsubsection.6.7.4}%
+\contentsline {subsection}{\numberline {6.8}Social and Political Issues}{30}{subsection.6.8}%
+\contentsline {paragraph}{Relevant UNSDGs}{31}{paragraph*.12}%
+\contentsline {subsubsection}{\numberline {6.8.1}Gender Equality}{31}{subsubsection.6.8.1}%
+\contentsline {paragraph}{Relevant UNSDGs}{31}{paragraph*.13}%
+\contentsline {subsection}{\numberline {6.9}Environmental Issues}{31}{subsection.6.9}%
+\contentsline {subsection}{\numberline {6.10}Multidisciplinary Collaboration}{32}{subsection.6.10}%
+\contentsline {section}{\numberline {7}CONCLUSIONS}{32}{section.7}%
+\contentsline {section}{\numberline {8}PROJECT PLAN AND FUTURE STUDIES}{33}{section.8}%
+\contentsline {subsection}{\numberline {.1}Appendix A, additional tables}{36}{subsection.Alph0.1}%
+\contentsline {subsection}{\numberline {.2}Appendix B, additional figures}{40}{subsection.Alph0.2}%
