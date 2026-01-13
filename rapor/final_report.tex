@@ -122,13 +122,13 @@ em]{#1}}\hspace{0.6em}}
 \pagenumbering{roman}
 
 \begin{abstract}
-This study addresses a Capacitated Vehicle Routing Problem with Simultaneous Pickup and Delivery (VRPSPD) motivated by last-mile operations. The dataset contains customer stops with geographic coordinates, service day, service type (pickup or delivery), and parcel quantities. We propose a cluster-first, route-second pipeline to enforce operational constraints such as stop-count limits per vehicle and vehicle capacity limits. First, stops are partitioned into geographically compact clusters (interpreted as vehicle tours) using a constrained K-means heuristic that targets balanced cluster sizes. Second, for each cluster, an initial feasible visit order is constructed using a greedy edge-based routing heuristic supported by the Google Distance Matrix API for travel times/distances. To ensure practicality under API limitations, travel queries are batched and candidate pruning is applied. 
-A pilot experiment on the first 100 Monday stops demonstrates spatially coherent clusters and produces route-level KPIs (total distance and total duration) for each cluster, enabling comparative evaluation. The full Monday dataset is clustered into 40 balanced tours satisfying the specified stop-count bounds, while large-demand outliers are flagged for split-service handling. The resulting outputs (cluster assignments, route sequences, and KPI summaries) form a reproducible baseline for further optimization and exact/OR-Tools-based refinement.
+This study addresses a Capacitated Vehicle Routing Problem with Simultaneous Pickup and Delivery (VRPSPD) motivated by last-mile operations. The dataset contains customer stops with geographic coordinates, service day, service type (pickup or delivery), and parcel quantities. We propose a cluster-first, route-second pipeline to enforce operational constraints such as stopcount limits per vehicle and vehicle capacity limits. First, stops are partitioned into geographically compact clusters (interpreted as vehicle tours) using a constrained K-means heuristic that targets balanced cluster sizes. Second, for each cluster, an initial feasible visit order is constructed using a greedy edge-based routing heuristic supported by the Google Distance Matrix API for travel times/distances. To ensure practicality under API limitations, travel queries are batched and candidate pruning is applied. 
+A pilot experiment on the first 100 Monday stops demonstrates spatially coherent clusters and produces route-level KPIs (total distance and total duration) for each cluster, enabling comparative evaluation. The full Monday dataset is clustered into 40 balanced tours satisfying the specified stopcount bounds, while large-demand outliers are flagged for split-service handling. The resulting outputs (cluster assignments, route sequences, and KPI summaries) form a reproducible baseline for further optimization and exact/OR-Tools-based refinement.
 \end{abstract}
 
 
 \vspace{0.3cm}
-\textbf{Key Words:} [keyword1; keyword2; keyword3; ...]
+\textbf{Key Words:} [Last-mile logistics; Pickup and delivery operations; Daily route planning; Total distance minimization; Mixed Integer Programming (MIP); Cluster-first Route-second; Gurobi; Google Distance Matrix; Sustainability; Scalability; Decision-support Framework]
 
 \newpage
 
@@ -149,7 +149,7 @@ A pilot experiment on the first 100 Monday stops demonstrates spatially coherent
 \begin{itemize}
     \item VRP: Vehicle Routing Problem
     \item VRPSPD: Capacitated Vehicle Routing Problem with Simultaneous Pickup and Delivery
-    \item MILP: Mixed-Integer Linear Programming
+    \item MIP: Mixed-Integer Programming
     \item MTZ: Miller--Tucker--Zemlin
     \item UNSDG: United Nations Sustainable Development Goals
     \item SDG: Sustainable Development Goals
@@ -167,8 +167,29 @@ A pilot experiment on the first 100 Monday stops demonstrates spatially coherent
 \setcounter{page}{0} 
 \clearpage
 \section{INTRODUCTION}
-The rise of e-commerce and the increasing expectations of today’s consumer for speed,
-transparency, and reliability have been shaping the logistical industry’s early stages of digital transformation. In this complex network of logistics activities, last-mile delivery or the distribution of goods from delivery centers to final customers has increasingly become a key point of competition among logistics companies. It is in this fast-paced environment that the project "UPS Cargo Vehicle Routing Optimization" finds its place. Detailed scientific methods will be applied to solve real-world logistical challenges faced by one of the world’s leading shipping companies in one of the world’s most congested metropolitan areas: İstanbul; and the capital of Türkiye, Ankara.
+Last-mile pickup and delivery operations are highly sensitive to fluctuations in daily demand, dense urban structures, and strict operational constraints such as vehicle capacity, driver working hours, and the number of stops that can be made per route. In practice, route plans that do not take these constraints into account may appear efficient on paper but can cause problems in the field, leading to overtime, missed pickups, re-planning during operations, and inconsistent service quality. This project develops a decision support framework that generates operationally feasible daily route plans in the context of parcel delivery, focusing specifically on UPS-like pickup–delivery operations.
+
+The primary output is a daily route plan in executable format: a sequential list of stops is generated for each vehicle in the form of depot → customer stops → depot. In addition to this plan, the following KPIs are reported on a route basis: total distance, total travel time, total service time, number of stops, and capacity/load suitability throughout the tour (including changes in load during the tour). Furthermore, a summary set of indicators is generated at the fleet level to support dispatch decisions; for example, total planned distance/time, average number of stops per route, and capacity utilization distribution.
+
+\subsection{Constraints}
+The framework directly considers the fundamental constraints that define courier operations in the field:
+
+\begin{itemize}
+    \item \textbf{Vehicle capacity and simultaneous pickup + delivery on the same tour} (dynamic increase and decrease of load throughout the tour)
+    \item \textbf{Minimum/maximum number of stops per route} (for operational feasibility)
+    \item \textbf{Shift duration limit} (travel + service times must fit within a working day)
+    \item \textbf{Zoning/neighborhood constraints where applicable} (to prevent routes from mixing unrealistically distant areas)
+    \item \textbf{Basic feasibility rules} such as each stop being served exactly once and each route starting and ending at the depot
+\end{itemize}
+
+\subsection{Aim \& Scope}
+The primary goal is to minimize total operational costs; in practice, this cost is represented by total travel distance and/or total travel time. If necessary, a secondary term penalizing the number of active vehicles (fleet utilization) can be added to the objective function to prevent the plan from being unnecessarily split into too many vehicles. Therefore, candidate solutions in the report are evaluated using operationally relevant KPIs such as total distance/time, number of routes, compliance of route duration with shift limits, and load/capacity suitability.
+
+Although the framework is designed to be adaptable to different cities, in this project, the application and evaluation are performed using real operational data from Istanbul's Anatolian side. Ankara is mentioned only to highlight the portability and scalability of the approach; Ankara is not an application/test site in this study.
+
+Methodologically, the project uses a Mixed-Integer Programming (MIP) model solved with Gurobi (gurobipy in Python) to produce a “complete solution” at the pilot level for small/medium-scale scenarios; for large daily problems, it uses a cluster-first, route-second (first clustering/assignment, then route generation) approach as a scalable backbone. Route costs are calculated based on actual travel distance/time rather than Euclidean distance (e.g., using a distance matrix similar to Google Distance Matrix); thus, model solutions can be evaluated with operational units.
+
+Section 2 reviews the VRP literature related to pickup–delivery operations and operationally constrained routing. Section 3 clarifies the project scope and assumptions; the elements addressed and those deliberately excluded. Section 4 explains the methodology: the basic VRP MIP template, project-specific extensions (simultaneous pickup–delivery, stop limits, shift limits, zoning), the solution flow with Gurobi, and the backbone of the heuristic approach. Section 5 presents the mathematical model and the existing clustering-based planning line and positions the pilot results within the correct framework. Section 6 discusses limitations and real-world applicability. Section 7 provides conclusions; Section 8 presents future work, including planned extensions such as traffic, multi-depot, advanced metaheuristics, and an updated Gantt chart.
 
 % =========================
 % 2. Literature Review
@@ -178,13 +199,15 @@ transparency, and reliability have been shaping the logistical industry’s earl
 
 Vehicle Routing Problems (VRPs) constitute a core class of NP-hard combinatorial optimization problems that arise in distribution and service systems. The classical VRP was introduced to formalize the dispatching of vehicles from a depot to multiple customers, and it has since evolved into a large family of variants that better capture operational realities \cite{DantzigRamser1959,Laporte2009,TothVigo2014}. Modern logistics settings, especially last-mile operations, frequently require richer constraints such as capacity, labor regulations, and service heterogeneity \cite{Vidal2019,HalvorsenWeare2014}.
 
-The problem considered in this project aligns with the Vehicle Routing Problem with Simultaneous Pickup and Delivery (VRPSPD), where deliveries and pickups are performed within the same tour and vehicle load changes dynamically during execution. This structure is operationally attractive because it integrates forward and reverse flows, yet it substantially increases routing complexity compared with standard CVRP formulations \cite{TothVigo2014,Vidal2019}. In practice, additional constraints such as stop-count limits, shift duration bounds, and workload balance are often as binding as pure distance minimization, particularly in courier operations \cite{HalvorsenWeare2014}.
+The problem considered in this project aligns with the Vehicle Routing Problem with Simultaneous Pickup and Delivery (VRPSPD), where deliveries and pickups are performed within the same tour and vehicle load changes dynamically during execution. This structure is operationally attractive because it integrates forward and reverse flows, yet it substantially increases routing complexity compared with standard CVRP formulations \cite{TothVigo2014,Vidal2019}. In practice, additional constraints such as stopcount limits, shift duration bounds, and workload balance are often as binding as pure distance minimization, particularly in courier operations \cite{HalvorsenWeare2014}.
 
-Regarding solution approaches, exact Mixed Integer Linear Programming (MILP) models provide optimal or near-optimal solutions for small instances and serve as benchmarks, but scale poorly as the number of customers grows \cite{TothVigo2014,GurobiManual}. Consequently, industrial routing commonly relies on heuristic and metaheuristic methods. Constructive heuristics such as Clarke--Wright savings and sweep-style clustering provide fast initial solutions \cite{ClarkeWright1964,GillettMiller1974}. These solutions are frequently improved using local search operators and metaheuristics (e.g., tabu search, simulated annealing, evolutionary algorithms) to escape local minima and enhance route quality \cite{Gendreau1994Tabu,Kirkpatrick1983,Osman1993SA,Prins2004GA}.
+Regarding solution approaches, exact Mixed Integer Linear Programming (MIP) models provide optimal or near-optimal solutions for small instances and serve as benchmarks, but scale poorly as the number of customers grows \cite{TothVigo2014,GurobiManual}. Consequently, industrial routing commonly relies on heuristic and metaheuristic methods. Constructive heuristics such as Clarke--Wright savings and sweep-style clustering provide fast initial solutions \cite{ClarkeWright1964,GillettMiller1974}. These solutions are frequently improved using local search operators and metaheuristics (e.g., tabu search, simulated annealing, evolutionary algorithms) to escape local minima and enhance route quality \cite{Gendreau1994Tabu,Kirkpatrick1983,Osman1993SA,Prins2004GA}.
 
 A practically relevant decomposition is the “cluster-first, route-second” paradigm, where customers are first partitioned into vehicle-sized groups and then routed within each group. This idea is closely related to assignment-based heuristics such as Fisher and Jaikumar’s generalized assignment approach \cite{FisherJaikumar1981}. For large-scale daily planning, this two-stage structure supports operational constraints (e.g., bounded number of stops per route) and yields geographically coherent tours, while still allowing subsequent intra-cluster improvement via local search or exact solvers on subproblems.
 
 Finally, recent routing research increasingly emphasizes sustainability, equity, and labor feasibility as first-class objectives rather than side constraints. Pollution-aware routing and sustainable VRP studies show that reductions in vehicle-kilometers traveled can jointly improve cost and environmental outcomes \cite{Shahin2025,Pilati2024,Gouraji2025}. Equity-focused routing is also gaining attention, highlighting that purely cost-driven optimization may systematically disadvantage certain regions unless fairness mechanisms are incorporated \cite{Bonku2024}. These perspectives motivate the inclusion of social, environmental, and regulatory considerations alongside operational KPIs in this project \cite{UN2015}.
+
+Most of the studies we reviewed address VRP-type problems either under ideal assumptions (e.g., simplified distance measurements, limited constraints) or using synthetic data sets that do not fully reflect daily courier operations. In many studies, practical constraints such as the number of stops, fixed shift duration, and zoning—which are critical in the field—take a backseat to achieving good results on standard datasets. This project targets a similar problem class but with a different focus: it addresses a scenario consistent with UPS-like daily planning logic, aims to be scalable to thousands of stops, and places practical constraints such as capacity + pickup–delivery in the same tour + stop number limits + shift suitability at the core of the model. Therefore, our contribution is not to “reinvent” existing methods; it is to combine modeling and heuristic ideas known to work in the literature into a practical decision support framework based on real operational data. In this sense, the work aims to bridge the gap between the academic VRP literature and real courier operations.
 
 % =========================
 % 3. Scope of the Project
@@ -218,17 +241,17 @@ The problem is defined as the optimization of pickup and delivery plans in daily
 operations. The objective is to assign a set of customer orders each possibly involving both
 deliveries and pickups to a vehicle fleet and determine the most efficient sequence of visits
 for each route.
-To understand the structure of our problem more clearly, we first introduce the classical
-VehicleRoutingProblem(VRP),whichformsthefoundationofmanymodernroutingmodels.
+To understand the structure of our problem more clearly, we first introduce the classical VRP,which forms the foundation of many modern routing models.
 The classical VRP, introduced about sixty years ago by Dantzig and Ramser (1959), and its
-many variants have been extensively studied. The VRP seeks to generate a routing plan for a fleet of identical vehicles such that each customer is visited exactly once, each route starts and 12 ends at a depot, and several operational constraints are satisfied. A wide range of heuristic and exact algorithms has been developed for VRP models. For detailed background, the reader may refer to Toth and Vigo (2014) [8], as well as the reviews by Laporte (2009) [9], Koç et al. (2016) [2], Koç and Laporte (2018) [10], and Vidal et al. (2019) [11].
+many variants have been extensively studied. The VRP seeks to generate a routing plan for a fleet of identical vehicles such that each customer is visited exactly once, each route starts and 12 ends at a depot, and several operational constraints are satisfied. A wide range of heuristic and exact algorithms has been developed for VRP models. For detailed background, the reader may refer to \cite{TothVigo2014},\cite{Laporte2009},\cite{KocLaporte2018},\cite{KocBektaS2016},\cite{Vidal2019}.
+
 When planning the movement of goods or people, Problem-to-Problem Delivery (PDP)
 is a variant of the Vehicle Routing Problem that is characterized by pickups and drop-offs that
 don’t have to start from a fixed depot, unlike the standard Vehicle Routing Problem. Each
 pickup and delivery request in a PDP has one pickup point and one drop-off point, and the
 vehicle is required to pick up before dropping off, known as the precedence rule. PDPs come
 in three main types, one-to-one, one-to-many-to-one and many-to-many, with the last one
-being the most complex [12].
+being the most complex \cite{PickupDeliveryReview2024}.
 Building on this foundation, we then focus on the specific VRP variants that define the
 nature of our project. From an operations research perspective, this problem falls under
 the Capacitated Vehicle Routing Problem with Pickup and Delivery (CVRPPD), and more
@@ -266,7 +289,41 @@ Since planning routes is done every morning and the volume of demand can change 
 one day to the next, a model that can update and rerun itself is basically a necessity to stay on top of the changing landscape. Because vehicles are locked into strict shift schedules and can’t operate beyond their capacity, poorly planned routes add up to time wasting, excessive kilometers and reduced productivity, which is why it’s so important to have a model that runs regularly.
 
 \subsubsection{UNSDG Consideration for Problem Definition}
-Which UNSDG(s) are relevant and why.
+\textbf{\sdgicon{E_SDG-goals_icons-individual-rgb-03.png}UNSDG 3 – Promoting Good Health and Well-being}
+
+More realistic and feasible route plans can indirectly benefit occupational health and safety by reducing driver fatigue caused by excessively long trips and time pressure. Additionally, reducing unnecessary vehicle-kilometers can have an impact on reducing local air pollution exposure.
+
+\textbf{\sdgicon{images (1).png}UNSDG 5 – Gender Equality}
+
+More realistic and feasible route plans can indirectly benefit occupational health and safety by reducing driver fatigue caused by excessively long trips and time pressure. Additionally, reducing unnecessary vehicle-kilometers can have an impact on reducing local air pollution exposure.
+
+\textbf{\sdgicon{images.png}UNSDG 8 – Decent Work and Economic Growth}
+
+Directly applying shift duration and operational feasibility constraints creates more predictable and safe daily workloads for couriers.  It has the potential to reduce systematic overtime pressure.
+
+\textbf{\sdgicon{Sustainable_Development_Goal_09Industry.svg.png}UNSDG 9 – Industry, Innovation and Infrastructure}
+
+The study presents a data-driven optimization and decision support approach that transforms operational data into actionable daily plans. The focus will be on strengthening the use of digital infrastructure and analytics in logistics planning.
+
+\textbf{\sdgicon{images (2).png}UNSDG 10 – Reduced Inequalities}
+
+Mere cost minimization may lead to the risk that some regions will be systematically served later or with lower priority; therefore, the planning approach should be interpreted carefully in terms of fair distribution of services.
+
+\textbf{\sdgicon{E_SDG_Icons_11.jpg}UNSDG 11 – Sustainable Cities and Communities}
+
+More efficient and geographically coherent routes can reduce unnecessary vehicle movement in dense urban areas, thereby lowering traffic congestion and the burden on urban operations.
+
+\textbf{\sdgicon{Sustainable_Development_Goal_12ResponsibleConsumption.svg.png}UNSDG 12 – Responsible Production and Consumption}
+
+Reducing unnecessary distance and time supports more efficient use of fuel, vehicle operating time, and labor time while maintaining the same service level. 
+
+\textbf{\sdgicon{images (3).png}UNSDG 13 – Climate Action}
+
+More efficient route planning can contribute to reduced fuel consumption and lower exhaust-related air pollutants by decreasing unnecessary vehicle movement.  This effect becomes particularly pronounced in dense urban areas with heavy stop-and-go trafficore efficient route planning can contribute to reduced fuel consumption and lower exhaust-related air pollutants by decreasing unnecessary vehicle movement.  This effect becomes particularly pronounced in dense urban areas.
+
+\textbf{\sdgicon{E_SDG-goals_icons-individual-rgb-16.png}UNSDG 16 – Peace, Justice, and Strong Institutions}
+
+Clear definition of constraints and the production of plans with measurable KPIs make decision processes more auditable and traceable, thereby strengthening institutional accountability.
 
 \subsection{Objectives of the Study}
 \begin{itemize}
@@ -296,6 +353,43 @@ operational costs, more fuel usage and longer kilometers traveled. There are aro
     \item Spatial Clustering: Routes must serve neighboring neighborhoods (no cross-district jumps)
     \item Depot: Start and end at the distribution center
 \end{itemize}
+In this study, the constraints that define field feasibility are treated as first-class model requirements rather than secondary considerations.
+
+\subsubsection{UPS-Specific Fleet Assumption (Non-binding Fleet Size)}
+UPS can hire additional drivers and rent extra vehicles on a daily basis. For modeling purposes, the fleet is treated as practically unlimited, meaning fleet size is not the binding restriction. Instead, feasibility and quality are governed by route-level constraints (capacity, time, stop count, and spatial realism). This assumption is explicitly used to focus the model on generating operationally feasible routes rather than failing due to an artificially tight fleet cap.
+
+\subsubsection{Service Time and Stop Density Context}
+Daily plans typically include around 100 stops. Service times in dense urban areas are short (approximately 1--5 minutes per stop), but total route feasibility is dominated by the combination of service time and travel time between stops. If routes are geographically scattered, travel time increases and the plan can exceed allowable working hours, triggering overtime, re-routing, or dispatcher intervention.
+
+\subsection{Scope Boundaries: Addressed vs. Excluded vs. Future Work}
+
+To avoid mixing implemented elements with planned extensions, the project scope is explicitly bounded as follows.
+
+\subsubsection{In Scope (Implemented / Directly Addressed)}
+\begin{itemize}
+    \item Usage and preprocessing of the Istanbul--Asian side operational dataset.
+    \item \textbf{VRP core routing optimization} including capacity feasibility, number-of-stops limits, shift feasibility, depot start/end, and single-service constraints.
+    \item Spatial logic for \textbf{neighbourhood adjacency} to maintain spatial realism.
+    \item Support for \textbf{pickup-only / delivery-only} assignments for high-volume customers when necessary.
+    \item Controlled scenario experiments (e.g., demand patterns, route sizes, capacity levels).
+    \item Route visualizations for operational evaluation.
+\end{itemize}
+
+\subsubsection{Out of Scope in This Phase (Deliberately Excluded)}
+\begin{itemize}
+    \item Traffic congestion and time-dependent travel times.
+    \item Customer time windows and appointment constraints.
+    \item Multi-depot structures and inter-depot allocation decisions.
+\end{itemize}
+
+\subsubsection{Planned Extensions (Future Work)}
+\begin{itemize}
+    \item Weather- and disruption-aware planning (e.g., incidents, closures, breakdowns).
+    \item Time-dependent metrics: traffic-aware distance/time matrices.
+    \item Generalization to multi-depot and larger-scale operational problems.
+    \item More sophisticated heuristic/metaheuristic components for large daily instances.
+\end{itemize}
+
 \subsubsection{Ethical Considerations}
 The project follows established ethical principles in data use, operational fairness, and social impact.
 
@@ -332,120 +426,158 @@ The project requires a genuinely multidisciplinary collaboration, bringing toget
 
 Industrial Engineering provides the foundation for systems thinking, mathematical modeling, and optimization, the core tools needed to structure the routing problem rigorously. Data Analytics enables the transformation of raw operational data into actionable insights, ensuring that demand patterns, customer densities, and service behaviors are properly understood before modeling. Computer Science contributes algorithmic design, computational efficiency, and the implementation of exact and heuristic methods, which are essential for solving large-scale instances that exceed traditional optimization limits. Logistics Management brings operational realism, structuring the solution within UPS’s operational constraints, behaviors, and real-world uncertainties of last-mile courier operations.
 
-This rich combination of disciplines is not an academic luxury but a necessity. Last-mile routing is a hybrid challenge mathematical, operational, technological, and organizational at the same time. Only an integrated, multidisciplinary approach can capture the complexity of simultaneous pickup–delivery operations, dynamic loads, neighborhood adjacency, and day-to-day feasibility [19,20].
+This rich combination of disciplines is not an academic luxury but a necessity. Last-mile routing is a hybrid challenge mathematical, operational, technological, and organizational at the same time. Only an integrated, multidisciplinary approach can capture the complexity of simultaneous pickup–delivery operations, dynamic loads, neighborhood adjacency, and day-to-day feasibility \cite{Jazemi2023},\cite{Shuaibu2025}.
 
-Throughout the project, the team will also engage with UPS personnel from operations, planning, and IT departments. These interactions ensure that the theoretical models align with actual on-ground practices, data structures, and operational constraints. By bridging academic expertise with industry experience, the project does more than build an optimization model; it creates a realistic, end-to-end decision-support framework that reflects the interdisciplinary nature of modern logistics systems [21].
-
+Throughout the project, the team will also engage with UPS personnel from operations, planning, and IT departments. These interactions ensure that the theoretical models align with actual on-ground practices, data structures, and operational constraints. By bridging academic expertise with industry experience, the project does more than build an optimization model; it creates a realistic, end-to-end decision-support framework that reflects the interdisciplinary nature of modern logistics systems \cite{Zhao2024}.
 % =========================
 % 4. Methodologies
 % =========================
 \clearpage
 \section{METHODOLOGIES}
 
-We employ a hybrid approach: a Mixed Integer Linear Programming (MILP) model for exact solutions on small datasets, and Heuristics and Metaheuristics for real-world scale. A variety of methodological approaches can be used to address the Pickup and Delivery Vehicle Routing Problem with capacity, time, and neighborhood adjacency constraints. The reviewed literature shows that VRP variants are typically solved through a combination of exact optimization, constructive heuristics, improvement-based procedures, and metaheuristics. Each method offers different advantages depending on the dataset size and computational requirements. The methodologies listed below represent the techniques that are most suitable for this project and reflect the approaches commonly used in VRPSPD and CVRPPD research.
+In this study, a hybrid methodological perspective is adopted to address the Pickup and Delivery Vehicle Routing Problem under capacity, time, and neighborhood-related constraints. A Mixed Integer Programming (MIP) model is formulated to provide an exact and formal representation of the problem structure, which is intended to be used for benchmarking and validation in later stages of the study.
 
-\subsection{Mixed Integer Linear Programming (MILP)}
-An exact mathematical model can be formulated using MILP to minimize total travel distance
-while respecting all UPS constraints, including:
+Given the scale and operational nature of real-world routing instances, preliminary solution insights are obtained through a heuristic cluster-first, route-second approach. Rather than employing a wide range of heuristic or metaheuristic techniques, the methodology focuses on a single, clearly defined heuristic structure that aligns with the underlying VRP formulation and supports scalability.
+
+This methodological choice reflects common practices in VRPSPD and CVRPPD research, where exact models are used for structural analysis and benchmarking, while heuristic approaches are employed to generate feasible solutions for larger instances.
+
+\subsection{Classical VRP as the Baseline Optimization Model}
+
+The Vehicle Routing Problem (VRP) can be expressed through a standard Mixed Integer Programming (MIP) formulation that serves as the foundation for many practical routing models. In its classical form, the objective is to determine a set of vehicle routes that start and end at a depot, serve all customers exactly once, and minimize total operational cost under capacity and time limitations.
+
+\subsubsection{Parameters}
 \begin{itemize}
-    \item dynamic capacity feasibility,
-    \item stop count limits,
-    \item shift duration bounds,
-    \item adjacency restrictions,
-    \item simultaneous pickup--delivery structure.
+    \item $d_{ij}$: travel distance between nodes $i$ and $j$
+    \item $t_{ij}$: travel time between nodes $i$ and $j$
+    \item $s_i$: service time at customer $i$
+    \item $Q$: vehicle capacity
+    \item $T^{\max}$: maximum route duration (shift length)
 \end{itemize}
 
-MILP provides optimal solutions for small to medium-sized problem instances and serves
-as a benchmark for evaluating heuristic and metaheuristic methods. The model will be solved
-using Gurobi, benefiting from presolve features, cut generation, heuristic repair strategies,
-and MIP-gap tuning [22,23].
+\subsubsection{Decision Variables}
+\begin{itemize}
+    \item $x_{ijk} \in \{0,1\}$: equals 1 if vehicle $k$ travels directly from node $i$ to node $j$
+    \item $z_k \in \{0,1\}$: equals 1 if vehicle $k$ is used
+    \item $u_{ik}$: sequencing variable for subtour elimination (MTZ)
+\end{itemize}
 
+\subsubsection{Objective Function}
+The classical VRP objective minimizes total travel cost:
+\begin{equation}
+\min \sum_{k} \sum_{i} \sum_{j} d_{ij} x_{ijk}
+\end{equation}
 
-% =========================================================
+Optionally, a fixed cost can be added to penalize excessive vehicle usage:
+\begin{equation}
+\min \sum_{k} \sum_{i} \sum_{j} d_{ij} x_{ijk} + \sum_k F z_k
+\end{equation}
+
+\subsubsection{Core Constraints}
+\begin{itemize}
+    \item \textbf{Flow conservation:} each customer has exactly one incoming and one outgoing arc
+    \item \textbf{Depot constraints:} each active vehicle starts and ends at the depot
+    \item \textbf{Capacity constraints:} vehicle load does not exceed $Q$
+    \item \textbf{Shift duration constraints:} total travel and service time does not exceed $T^{\max}$
+    \item \textbf{Subtour elimination:} MTZ constraints ensure route connectivity
+\end{itemize}
+
+This formulation serves as a baseline framework for more realistic routing models.\cite{TothVigo2014} \cite{laporte1992vrp}
+
+\subsection{Extensions to the Classical VRP Baseline}
+
+The problem addressed in this study extends the classical VRP to reflect real-world courier operations. The main differences are summarized as follows:
+
+\begin{itemize}
+    \item \textbf{Simultaneous Pickup and Delivery:} Each customer may require both pickup and delivery, resulting in dynamic vehicle loads throughout the route.
+    \item \textbf{Stop Count Constraints:} Each route must include a minimum and maximum number of stops to ensure workload balance.
+    \item \textbf{Shift Duration Limits:} Routes must comply with strict working-hour regulations.
+    \item \textbf{Neighborhood Constraints:} Routes are restricted to geographically coherent areas to prevent unrealistic cross-district routing.
+\end{itemize}
+
+These extensions transform the problem into a \textbf{Capacitated Vehicle Routing Problem with Simultaneous Pickup and Delivery (VRPSPD)}. \cite{min1989vrpspd}
+
 \subsection{Exact Optimization via Gurobi}
-% =========================================================
-Gurobi is used as the primary exact solver for the MILP model. It allows:
-\begin{itemize}
-    \item exploration of solver parameters (threads, MIPGap, presolve levels),
-    \item generation of multiple near-optimal solutions,
-    \item performance testing on synthetic and real UPS datasets.
-\end{itemize}
 
-This approach establishes the theoretical best-case performance for smaller instances [24].
+In order to provide an exact optimization reference for the extended VRP formulation, a Mixed Integer Programming (MIP) approach is considered to be solved using Gurobi. The model is planned to be implemented in Python through the \texttt{gurobipy} interface. Rather than focusing on solver specific details, this section describes how Gurobi is intended to be used within the overall solution pipeline.
 
-% =========================================================
-\subsection{Heuristic and Metaheuristic Alternatives}
-% =========================================================
-Since the real-world UPS data set contains instances of a large scale (80-110 stops per vehicle), the use of exact methods for daily planning is not feasible in terms of computation. Thus, we executed a thorough survey of the alternatives put forward in the literature to be taken into account for the implementation phase.
-% =========================================================
-\subsubsection{Constructive Heuristics}
-Constructive heuristics are starting to not only come up with a possible solution but also create one from nothing. The methods below were analyzed as possible candidates:
+\subsubsection{Planned Gurobi-Based Solution Workflow}
 
-\begin{itemize}
-    \item \textbf{Clarke--Wright Savings Algorithm}: A basic method that reduces the number of routes by combining them if this results in lower costs.
-    
-    \item \textbf{Nearest Neighbor}: A greedy method in which the vehicle always moves to the unvisited node nearest to it. This operation is quick, but it does frequently yield less than optimal routes.
-    
-    \item \textbf{Sweep Algorithm}: A spatial technique that groups customers by turning a ray around the depot. 
-\end{itemize}
-[25-27]
+The planned implementation follows a sequential workflow that transforms raw input data into executable vehicle routes:
 
-% =========================================================
-\subsubsection{Local Search - Based Improvement Methods}
-% =========================================================
-In our effort to improve the preliminary answers, we examined local search operators again:
+\begin{enumerate}
+    \item \textbf{Data Reading:}  
+    Customer and depot data are read using Python from structured input files containing geographic coordinates, delivery quantities, pickup quantities, and service times.
 
-\begin{itemize}
-    \item \textbf{Intra-route Operators}: 2-opt, 3-opt, and Or-opt in order to obtain shorter routes through a single route connection restructuring.
-    
-    \item \textbf{Inter-route Operators}: Relocate, Swap, and Cross-exchange to transfer clients among diverse routes in order to balance workload.
-\end{itemize}
-[28,29].
-% =========================================================
-\subsubsection{Metaheuristic Optimization}
-To tackle the challenging VRPSPD, we additionally looked into sophisticated metaheuristics:
+    \item \textbf{Model Construction:}  
+    The extended VRP formulation is encoded in Gurobi by defining decision variables, the objective function, and all constraints using the \texttt{gurobipy} modeling interface. This step translates the mathematical formulation into a solver-readable model.
 
-\begin{itemize}
-    \item \textbf{Tabu Search}: Employs a ``tabu list'' to avoid the algorithm from cycling, thus permitting the escape from local minima.[30]
-    
-    \item \textbf{Simulated Annealing}: Takes advantage of a probabilistic method to temporarily accept poor solutions so as to spread the search.[33]
-    
-    \item \textbf{Genetic Algorithms}: Simulates natural selection to produce high-quality solutions through generations.[31,32]
-\end{itemize}
+    \item \textbf{Optimization:}  
+    The resulting MIP model is solved using Gurobi’s branch-and-bound algorithm. The solver searches for an optimal or near-optimal solution within specified computational limits.
 
-% =========================================================
-\subsubsection{Strongly Candidate Approach: Cluster-First, Route-Second Heuristic}
-After conducting a situation analysis, we are contemplating the strategy
-``Cluster-First, Route-Second'' as a highly viable alternative framework for the forthcoming phase.
+    \item \textbf{Route Reconstruction:}  
+    After optimization, the values of the decision variables are extracted and postprocessed in Python to reconstruct vehicle routes. Each route is represented as an ordered sequence of customer visits starting and ending at the depot.
+\end{enumerate}
 
-\textbf{Concept}: The problem is divided into two stages: at the first stage, the customers are clustered into vehicles based on their capacity ($Q = 350$) and stop limits ($S_{\max} = 110$), and at the second stage, the routes are optimized within each cluster.
+This workflow explicitly defines how Gurobi integrates into the proposed methodology and how optimization outputs are converted into operational routing plans.
 
-\textbf{Potential Candidate}: The Fisher and Jaikumar Algorithm is recognized as a potential candidate within this framework. It adopts a Generalized Assignment Problem (GAP) formulation for the purpose of clustering, which could probably manage UPS's rigorous capacity restrictions more effectively than basic geometric heuristics.
+\subsection{Planned Heuristic Solution Approach}
 
-In the next semester, we will analyze this heuristic and algorithm together with the mentioned metaheuristics.
+In this study, a \textbf{Cluster-First, Route-Second Heuristic} is selected as the primary solution approach. At the current stage of the project, this heuristic has not yet been implemented; however, its structure and rationale are clearly defined to guide the subsequent implementation phase.
 
-% =========================================================
-\subsection{Experimental Performance Analysis}
-% =========================================================
-In order to assess the effectiveness of the aforementioned techniques, systematic trials are planned with the following variables being altered: customer numbers, fleet size, vehicle capacity, and demand distribution patterns. The critical performance indicators are the overall distance, computational time, routes applied, solution gaps, and feasibility ratios under actual constraints. [34]
-% =========================================================
+The selection of this heuristic is motivated by its strong alignment with the structure of the classical VRP and its ability to naturally incorporate the operational constraints introduced in Section~4.2. 
+
+\subsection{Rationale for Heuristic Selection}
+
+The primary motivation for selecting a cluster-first, route-second heuristic is scalability. Exact optimization methods may become computationally impractical for large-scale daily routing instances. By decomposing the problem into assignment and routing phases, the heuristic reduces computational complexity while preserving feasibility.
+
+Additionally, the assignment-first logic allows capacity limits, pickup and delivery balance, stopcount bounds, and shift duration constraints to be enforced before routing decisions are made.
+
+\subsection{Planned Heuristic Workflow}
+
+The planned heuristic follows a structured workflow that replaces global optimization with problemdriven constructive decisions. The intended steps of the heuristic are as follows:
+
+\begin{enumerate}
+    \item \textbf{Input Data Processing:}  
+    Customer and depot data will be read, including geographic locations, pickup and delivery quantities, and service times.
+
+    \item \textbf{Clustering (Assignment) Phase:}  
+    Customers will be assigned to vehicle-sized clusters based on geographic proximity and operational constraints such as vehicle capacity, stopcount limits, pickup-delivery balance, and shift duration.
+
+    \item \textbf{Route Construction Phase:}  
+    For each cluster, a feasible visit sequence will be constructed, ensuring that each route starts and ends at the depot.
+
+    \item \textbf{Feasibility Evaluation:}  
+    The constructed routes will be evaluated against all operational constraints, and adjustments will be planned if violations occur.
+
+    \item \textbf{Final Route Output:}  
+    The final output will consist of executable vehicle routes represented as ordered customer visit sequences.
+\end{enumerate}
+\cite{FisherJaikumar1981}
+\subsection{Algorithmic Logic and Conceptual Foundation}
+
+The heuristic is conceptually aligned with the assignment-first routing framework proposed by Fisher and Jaikumar (1981). In this framework, the VRP is decomposed into an assignment problem followed by a routing problem within each assignment.
+
+Rather than relying on metaheuristic search, the proposed heuristic emphasizes feasibility-driven construction, where operational constraints guide customer assignment and route formation from the outset.
+
+The current clustering procedure is not an implementation of the Fisher and Jaikumar algorithm. A simpler distance-based clustering is used for initial analysis, while the Fisher and Jaikumar approach is planned for future stages of the study.
+\cite{FisherJaikumar1981}
 \subsection{Application to Real UPS Operational Data}
-% =========================================================
+
 At last, the methods will be put into practice with the real UPS data from the Asian Side of Istanbul. The effective validation of the following will be the objective: operational feasibility, geographic compactness, accuracy when compared to existing manual routes, and distance, cost, and workload distribution being the areas where improvements are potentially made. This last step is a proof of the proposed approach being applicable and its value in real-life courier operations.[35-37]
 
 \subsection{Limitations of the Proposed Methodologies}
 
 Every single optimization approach involves the selection of a proper path with certain trade-offs between the solution quality and computational efficiency. Here are the potential limitations of the chosen methodologies for this study:
 
-\subsubsection{Limitations of Exact Optimization (MILP)}
+\subsubsection{Limitations of Exact Optimization (MIP)}
 
-\textbf{Computational Complexity (NP-Hardness)}: The main drawback of the MILP model is its inability to scale. The Vehicle Routing Problem belongs to the NP-hard category. As the number of customer nodes grows, the time taken to fetch the global optimal solution increases at an exponential rate. For our dataset of 80--110 stops per truck, getting the MILP solved to optimality in a reasonable amount of time (say, 1 hour) is mathematically impossible with the existing computing power.
+\textbf{Computational Complexity (NP-Hardness)}: The main drawback of the MIP model is its inability to scale. The Vehicle Routing Problem belongs to the NP-hard category. As the number of customer nodes grows, the time taken to fetch the global optimal solution increases at an exponential rate. For our dataset of 80--110 stops per truck, getting the MIP solved to optimality in a reasonable amount of time (say, 1 hour) is mathematically impossible with the existing computing power.
 
 \textbf{Rigidity}: Exact models necessitate exact linear constraints. Using highly complex, non-linear real-world conditions (like dynamic traffic speeds that vary every minute) can make the model unsolvable.
 
 \subsubsection{Limitations of Heuristic Approaches (Fisher \& Jaikumar)}
 
-\textbf{Optimality Gap}: Heuristics, in contrast to MILP, do not offer any guarantee of reaching the global optimal solution (the very best route). They proceed to look for ``good enough'' (near-optimal) solutions. The possibility of being confined to a local maximum where the algorithm believes it has found the best route but actually overlooks a better one is always present.
+\textbf{Optimality Gap}: Heuristics, in contrast to MIP, do not offer any guarantee of reaching the global optimal solution (the very best route). They proceed to look for ``good enough'' (near-optimal) solutions. The possibility of being confined to a local maximum where the algorithm believes it has found the best route but actually overlooks a better one is always present.
 
 \textbf{Sensitivity to Initialization}: The efficacy of the ``Cluster-First, Route-Second'' method, especially the Fisher and Jaikumar algorithm, is greatly dependent on the different initial selections of ``seed points'' (centers of the clusters). If the seed points are not appropriately selected, then the resulting clusters may have uneven distribution or be geometrically inefficient which will be hard to fix in the subsequent routing phase.
 
@@ -459,52 +591,11 @@ Every single optimization approach involves the selection of a proper path with 
 To undertand our data and to be able to work with it we first cleaned the names of the columns and replaced all Turkish words to English. Here is a quick look at our data. 
 \input{assets/tables/tabledatasetsummary.tex}
 
+The dataset consists of a depot and a set of customers with known locations, delivery demands, and pickup demands. Vehicle capacity constraints and distance-based travel costs are incorporated to model a realistic VRPSPD setting.
 
-\subsubsection{Data pipeline and validation}
-The operational dataset contains stop identifiers, geographic coordinates (longitude/latitude), service day, service type (delivery or pickup), and parcel quantities. Prior to optimization, the data are filtered by service day and basic consistency checks are applied (missing coordinates, invalid quantities, and duplicate stop IDs). For the Monday dataset used in clustering, a total of 3{,}798 stops are processed, consisting of 3{,}102 delivery stops and 696 pickup stops, with an aggregate parcel count of 14{,}826.
+\subsubsection{Mathematical Model}
 
-A key feasibility consideration is the vehicle capacity constraint ($Q=350$ packages). While the full dynamic-load feasibility requires the ordered sequence and initial load assumptions, the raw stop-level quantities still provide an important screening mechanism. In the Monday data, 9 stops exceed 350 packages; these customers are flagged as high-volume outliers that may require split-service, dedicated vehicles, or preassignment rules as seen in appendix D, \cref{tab:qty_outliers}
-
-\subsubsection{Cluster-first stage (balanced geographic clustering)}
-To obtain operationally manageable tours, stops are partitioned into geographically compact clusters that represent candidate vehicle routes. The clustering stage is designed to satisfy UPS-style stop-count bounds by construction, targeting 80--110 stops per route. On the full Monday dataset, the procedure produces 40 clusters with sizes ranging from 80 to 110 (mean 94.95, standard deviation 10.06), indicating that the size-balancing mechanism successfully controls workload distribution at the route level (Appendix Table~\cref{tab:dataset_summary}).
-
-For reporting and debugging, a pilot experiment is conducted on the first 100 Monday stops. This pilot instance is clustered into 5 groups, which allows visualization and end-to-end KPI computation (Figure~\cref{fig:cluster_first100}).
-
-\subsubsection{Route-second stage (intra-cluster sequencing and travel metrics)}
-For each cluster, a feasible visit order is constructed using a greedy edge-based heuristic that iteratively extends the route by selecting the next promising stop under the chosen travel metric. Pairwise travel distances and durations are obtained via the Google Distance Matrix API under driving mode \cite{GoogleDistanceMatrixAPI}. Due to API quota limitations, queries are batched and cached, and the pilot reporting is based on non-traffic durations; traffic-inclusive durations are reported separately as reference values (Appendix Tables~\cref{tab:sample10_dur_min} and \cref{tab:sample10_traf_min}).
-
-Route-level KPIs are computed as the sum of arc costs along the ordered sequence, including depot departure and return. The primary KPIs reported are total distance (km), total travel duration (min), and derived efficiency ratios such as km per stop and minutes per stop.
-
-
-\subsection{Data pipeline and validation}
-The operational dataset contains stop identifiers, geographic coordinates (longitude/latitude), service day, service type (delivery or pickup), and parcel quantities. Prior to optimization, the data are filtered by service day and basic consistency checks are applied (missing coordinates, invalid quantities, and duplicate stop IDs). For the Monday dataset used in clustering, a total of 3{,}798 stops are processed, consisting of 3{,}102 delivery stops and 696 pickup stops, with an aggregate parcel count of 14{,}826.
-
-A key feasibility consideration is the vehicle capacity constraint ($Q=350$ packages). While the full dynamic-load feasibility requires the ordered sequence and initial load assumptions, the raw stop-level quantities still provide an important screening mechanism. In the Monday data, 9 stops exceed 350 packages; these customers are flagged as high-volume outliers that may require split-service, dedicated vehicles, or preassignment rules (Appendix Table~\cref{tab:qty_outliers}).
-
-\subsection{Cluster-first stage (balanced geographic clustering)}
-To obtain operationally manageable tours, stops are partitioned into geographically compact clusters that represent candidate vehicle routes. The clustering stage is designed to satisfy UPS-style stop-count bounds by construction, targeting 80--110 stops per route. On the full Monday dataset, the procedure produces 40 clusters with sizes ranging from 80 to 110 (mean 94.95, standard deviation 10.06), indicating that the size-balancing mechanism successfully controls workload distribution at the route level (Appendix Table~\cref{tab:dataset_summary}).
-
-For reporting and debugging, a pilot experiment is conducted on the first 100 Monday stops. This pilot instance is clustered into 5 groups, which allows visualization and end-to-end KPI computation (Figure~\cref{fig:cluster_first100}).
-
-\subsection{Route-second stage (intra-cluster sequencing and travel metrics)}
-For each cluster, a feasible visit order is constructed using a greedy edge-based heuristic that iteratively extends the route by selecting the next promising stop under the chosen travel metric. Pairwise travel distances and durations are obtained via the Google Distance Matrix API under driving mode \cite{GoogleDistanceMatrixAPI}. Due to API quota limitations, queries are batched and cached, and the pilot reporting is based on non-traffic durations; traffic-inclusive durations are reported separately as reference values (Appendix Tables~\cref{tab:sample10_dur_min} and \cref{tab:sample10_traf_min}).
-
-Route-level KPIs are computed as the sum of arc costs along the ordered sequence, including depot departure and return. The primary KPIs reported are total distance (km), total travel duration (min), and derived efficiency ratios such as km per stop and minutes per stop.
-
-\subsection{Mathematical Model}
-
-
-The proposed optimization model is formulated as a Capacitated Vehicle Routing Problem
-with Simultaneous Pickup and Delivery (VRPSPD) and incorporates a priority-based penalty
-mechanism. The model is used as the analytical foundation to evaluate the impact of
-delivery priorities on routing decisions, fleet utilization, and service feasibility.
-
-The prioritized penalty structure embedded in the objective function ensures that delayed
-express deliveries incur the highest cost, followed by express, delayed normal, and normal
-deliveries. This structure directly influences the resulting routes and vehicle assignments,
-which are analyzed in the following sections.
-
-\subsubsection{Sets and Indices}
+\textbf{Sets and Indices}
 
 \begin{itemize}
     \item $N = \{0,1,\dots,n\}$: Set of all nodes, where node $0$ denotes the depot.
@@ -512,7 +603,7 @@ which are analyzed in the following sections.
     \item $K$: Set of available vehicles.
 \end{itemize}
 
-\subsubsection{Parameters}
+\textbf{Parameters}
 
 \begin{itemize}
     \item $d_{ij}$: Distance between nodes $i$ and $j$.
@@ -528,7 +619,7 @@ which are analyzed in the following sections.
     \item $M$: A sufficiently large constant.
 \end{itemize}
 
-\subsubsection{Decision Variables}
+\textbf{Decision Variables}
 
 \begin{itemize}
     \item $x_{ijk} \in \{0,1\}$: Equals 1 if vehicle $k$ travels from node $i$ to node $j$.
@@ -539,9 +630,7 @@ which are analyzed in the following sections.
     \item $u_{ik} \ge 0$: MTZ sequencing variable.
 \end{itemize}
 
-\subsubsection{Objective Function}
-
-The objective function minimizes the total operational cost, which consists of travel distance cost, fixed vehicle usage cost, and prioritized penalty costs:
+\textbf{Objective Function}
 
 \begin{equation}
 \min
@@ -554,35 +643,17 @@ The objective function minimizes the total operational cost, which consists of t
 \right]
 \end{equation}
 
-The first term represents the total distance traveled by all vehicles.
-The second term penalizes the use of additional vehicles, encouraging fleet efficiency.
-The third term introduces a prioritized penalty structure, where express customers
-($E_i = 1$) incur an additional priority cost $\alpha$, while customers that remain
-unserved within the planning horizon incur a backlog penalty $\beta$, with $\beta \gg \alpha$.
-
-This structure ensures the following priority order:
-\[
-\text{delayed express} > \text{express} > \text{delayed normal} > \text{normal}.
-\]
-
-This structure directly affects routing decisions by prioritizing express
-and delayed deliveries under capacity and operational constraints.
-
-\subsubsection{Constraints}
+\textbf{Constraints}
 
 \paragraph{Customer Assignment}
 \begin{equation}
 \sum_{k \in K} y_{ik} \le 1 \quad \forall i \in C
 \end{equation}
 
-Only one vehicle can be used in attending to each customer to prevent duplication.
-
 \paragraph{Vehicle Activation}
 \begin{equation}
 y_{ik} \le z_k \quad \forall i \in C, k \in K
 \end{equation}
-
-The vehicle comes into effect as a serves-one-customer vehicle, thus determining that fixed costs are only charged based on the utilization of the vehicles.
 
 \paragraph{Flow Conservation}
 \begin{equation}
@@ -595,7 +666,6 @@ The vehicle comes into effect as a serves-one-customer vehicle, thus determining
 \quad \forall j \in C, k \in K
 \end{equation}
 
-These constraints ensure route continuity by guaranteeing only one incoming and one outgoing arc to all visited customers.
 
 \paragraph{Depot Constraints}
 \begin{equation}
@@ -608,7 +678,6 @@ These constraints ensure route continuity by guaranteeing only one incoming and 
 \quad \forall k \in K
 \end{equation}
 
-Any given vehicle that starts must start from the depot and return after finishing his duty.
 
 \paragraph{Stop Count Constraints}
 \begin{equation}
@@ -616,8 +685,6 @@ Any given vehicle that starts must start from the depot and return after finishi
 \quad \forall k \in K
 \end{equation}
 
-These constraints limit the number of customers served by each vehicle to a
-predefined operational interval.
 
 \paragraph{Dynamic Capacity Constraints}
 \begin{equation}
@@ -630,8 +697,6 @@ q_{jk} \ge q_{ik} - D_j + P_j - M(1 - x_{ijk})
 \quad \forall i \in N, k \in K
 \end{equation}
 
-These constraints ensure that vehicle loads dynamically decrease due to
-deliveries and increase due to pickups, while always remaining within capacity limits.
 
 \paragraph{Time Feasibility}
 \begin{equation}
@@ -639,8 +704,6 @@ t_{jk} \ge t_{ik} + s_i + t_{ij} - M(1 - x_{ijk})
 \quad \forall i,j \in N, k \in K
 \end{equation}
 
-These constraints ensure temporal feasibility by accounting for travel times
-and service durations along each route.
 
 \paragraph{MTZ Subtour Elimination}
 \begin{equation}
@@ -653,12 +716,67 @@ u_{ik} - u_{jk} + |C| x_{ijk} \le |C| - 1
 \quad \forall i \in C, k \in K
 \end{equation}
 
-The Miller–Tucker–Zemlin (MTZ) constraints prevent the formation of subtours
-disconnected from the depot, ensuring a single continuous route for each vehicle.
+The proposed optimization model is formulated as a \textbf{Capacitated Vehicle Routing Problem
+with Simultaneous Pickup and Delivery (VRPSPD)} and incorporates a priority-based penalty
+mechanism. The model is used as the analytical foundation to evaluate the impact of
+delivery priorities on routing decisions, fleet utilization, and service feasibility.
+
+\textbf{(1) The objective function} minimizes the total operational cost, which consists of travel distance cost, fixed vehicle usage cost, and prioritized penalty costs.
+The first term represents the total distance traveled by all vehicles.
+The second term penalizes the use of additional vehicles, encouraging fleet efficiency.
+The third term introduces a prioritized penalty structure, where express customers
+($E_i = 1$) incur an additional priority cost $\alpha$, while customers that remain
+unserved within the planning horizon incur a backlog penalty $\beta$, with $\beta \gg \alpha$.
+This structure ensures the following priority order:
+\[
+\text{delayed express} > \text{express} > \text{delayed normal} > \text{normal}.
+\]
+This structure directly affects routing decisions by prioritizing express
+and delayed deliveries under capacity and operational constraints.
+
+\textbf{(2) Customer Assignment Constraint:} Only one vehicle can be used in attending to each customer to prevent duplication.
+
+\textbf{(3) Vehicle Activation Constraint:} The vehicle comes into effect as a serves one customer vehicle, thus determining that fixed costs are only charged based on the utilization of the vehicles..
+
+\textbf{(4) (5) Flow Conservation Constraints:} These constraints ensure route continuity by guaranteeing only one incoming and one outgoing arc to all visited customers.
+
+\textbf{(6) (7) Depot Constraints:} Any given vehicle that starts must start from the depot and return after finishing his duty.
+
+\textbf{(8) Stop Count Constraint:} These constraints limit the number of customers served by each vehicle to a predefined operational interval
+
+\textbf{(9) (10) Dynamic Capacity Constraints:} These constraints ensure that vehicle loads dynamically decrease due to deliveries and increase due to pickups, while always remaining within capacity limits.
+
+\textbf{(11) Time Feasibility Constraint:} These constraints ensure temporal feasibility by accounting for travel times and service durations along each route.
+
+\textbf{(12) (13) MTZ Subtour Elimination Constraints:} The Miller–Tucker–Zemlin (MTZ) constraints prevent the formation of subtours disconnected from the depot, ensuring a single continuous route for each vehicle.
+
+At the current stage of the study, the mixed-integer programming model presented above has been formulated but \textbf{not yet solved}. The primary role of this model is to serve as a formal and exact representation of the problem structure, which will later be used for benchmarking and validation purposes.
+
+While solving the full MIP model is planned for subsequent stages using Gurobi, preliminary routing insights are obtained through a simplified cluster-first, route-second approach.
+
+\subsubsection{Data pipeline and validation}
+The operational dataset contains stop identifiers, geographic coordinates (longitude/latitude), service day, service type (delivery or pickup), and parcel quantities. Prior to optimization, the data are filtered by service day and basic consistency checks are applied (missing coordinates, invalid quantities, and duplicate stop IDs). For the Monday dataset used in clustering, a total of 3{,}798 stops are processed, consisting of 3{,}102 delivery stops and 696 pickup stops, with an aggregate parcel count of 14{,}826.
+
+A key feasibility consideration is the vehicle capacity constraint ($Q=350$ packages). While the full dynamic-load feasibility requires the ordered sequence and initial load assumptions, the raw stop-level quantities still provide an important screening mechanism. In the Monday data, 9 stops exceed 350 packages; these customers are flagged as high-volume outliers that may require split-service, dedicated vehicles, or preassignment rules as seen in appendix D, \cref{tab:qty_outliers}
+
+\subsubsection{Cluster-first stage (balanced geographic clustering)}
+To obtain operationally manageable tours, stops are partitioned into geographically compact clusters that represent candidate vehicle routes. The clustering stage is designed to satisfy UPS-style stopcount bounds by construction, targeting 80--110 stops per route. On the full Monday dataset, the procedure produces 40 clusters with sizes ranging from 80 to 110 (mean 94.95, standard deviation 10.06), indicating that the size-balancing mechanism successfully controls workload distribution at the route level (Appendix Table~\cref{tab:dataset_summary}).
+
+For reporting and debugging, a pilot experiment is conducted on the first 100 Monday stops. This pilot instance is clustered into 5 groups, which allows visualization and end-to-end KPI computation (Figure~\cref{fig:cluster_first100}).
+
+\subsubsection{Route-second stage (intra-cluster sequencing and travel metrics)}
+For each cluster, a feasible visit order is constructed using a greedy edge-based heuristic that iteratively extends the route by selecting the next promising stop under the chosen travel metric. Pairwise travel distances and durations are obtained via the Google Distance Matrix API under driving mode \cite{GoogleDistanceMatrixAPI}. Due to API quota limitations, queries are batched and cached, and the pilot reporting is based on non-traffic durations; traffic-inclusive durations are reported separately as reference values (Appendix Tables~\cref{tab:sample10_dur_min} and \cref{tab:sample10_traf_min}).
+
+Route-level KPIs are computed as the sum of arc costs along the ordered sequence, including depot departure and return. The primary KPIs reported are total distance (km), total travel duration (min), and derived efficiency ratios such as km per stop and minutes per stop.
+
 
 \subsection{Results}
 
-The pilot experiment on the first 100 Monday stops yields 5 feasible clusters and corresponding route KPIs (Table~\cref{tab:pilot_kpis_first100}). The results show meaningful variation across clusters. Clusters 0, 1, and 3 represent dense urban tours with 17--30 stops and total travel distances around 107--121 km, while cluster 4 is comparatively shorter (81.91 km). In contrast, cluster 2 contains only 5 stops yet results in the largest distance (130.19 km), indicating a geographically distant or spatially sparse set of customers that dominates route cost despite the small stop count. This pattern is operationally important because it highlights that balanced stop-count constraints alone do not guarantee balanced travel burden; additional balancing criteria or geographic constraints may be required to avoid creating “few-stop but long-drive” routes.
+\subsubsection{Clustering Results}
+
+The analysis presented in this section is based on exploratory trials rather than final or optimized solutions. At this stage, customer clustering is performed using the k-means algorithm as a simple, distance-based approach in order to gain preliminary insights into the spatial structure of the problem. Clustering is carried out solely based on geographic proximity, without explicitly incorporating operational constraints. The number of clusters is predefined and set equal to the number of available vehicles, with each cluster interpreted as a candidate service region for a single route in the subsequent routing phase. Constraints such as stop-count limits, vehicle capacity, and shift duration are not enforced as hard constraints during clustering; instead, they are considered indirectly by monitoring cluster sizes and aggregate demand levels and are evaluated during route construction. The applied clustering approach should not be interpreted as an implementation of the Fisher--Jaikumar assignment heuristic. While the Fisher--Jaikumar methodology provides a more structured and capacity-aware assignment framework, it is reserved for future stages of this study. Accordingly, the results reported in this section are indicative and exploratory in nature, and are intended to support methodological understanding rather than to represent final optimized outcomes.
+
+The pilot experiment on the first 100 Monday stops yields 5 feasible clusters and corresponding route KPIs (Table~\cref{tab:pilot_kpis_first100}). The results show meaningful variation across clusters. Clusters 0, 1, and 3 represent dense urban tours with 17--30 stops and total travel distances around 107--121 km, while cluster 4 is comparatively shorter (81.91 km). In contrast, cluster 2 contains only 5 stops yet results in the largest distance (130.19 km), indicating a geographically distant or spatially sparse set of customers that dominates route cost despite the small stop count. This pattern is operationally important because it highlights that balanced stopcount constraints alone do not guarantee balanced travel burden; additional balancing criteria or geographic constraints may be required to avoid creating “few-stop but long-drive” routes.
 
 At the KPI level, the observed km-per-stop and minutes-per-stop ratios provide a compact measure of route compactness. For example, cluster 2 exhibits the highest km-per-stop and minutes-per-stop values, confirming that it is the least compact tour in the pilot. Figures~\cref{fig:kpi_km_first100} and \cref{fig:kpi_min_first100} visualize these differences across clusters. An example ordered route sequence (Monday cluster 0) is reported in Appendix Table~\cref{tab:route_seq_cluster0} to illustrate the output format used by the decision-support pipeline.
 
@@ -716,18 +834,17 @@ priorities before implementation.
 % Report all sub-sections and relate relevant UNSDGs where appropriate
 
 \subsection{Study limitations}
-Our study has several practical limitations that affect how closely the results can match real-world operations. First, the model relies on simplifying assumptions about travel times, service times, and operational constraints. In real logistics networks, travel times can vary sharply due to traffic incidents, road closures, weather conditions, and time-dependent congestion, which cannot be perfectly captured with a single static estimate.
+There are three key practical limitations that restrict how closely our findings align with real-world operations. 
 
-Second, obtaining high-quality, real-time travel time data often requires external mapping services (e.g., Google Maps Distance Matrix), which introduces cost and quota constraints. Since such APIs are typically billed per request and may have limited free usage, it becomes expensive to compute or refresh large-scale origin-destination matrices frequently, especially when the number of stops is high and repeated queries are needed for multiple scenarios. As a result, fully dynamic re-optimization at fine time resolution may be financially and computationally infeasible for many teams or small-scale deployments.
+First, our model simplifies travel times and constraints; however, in actual logistics networks, travel times vary sharply due to traffic incidents, road closures, weather conditions, and time-dependent congestion, making it impossible to accurately measure these situations with a single static prediction. 
 
-Finally, the approach faces scalability limits. As the instance size grows, the routing problem and the number of pairwise distance evaluations can increase rapidly, making both optimization and data acquisition more demanding. Therefore, the reported outcomes should be interpreted as a strong baseline under controlled assumptions rather than a perfect replica of live operations.
+Second, real-time travel data necessitates quota-limited and costly external map APIs (e.g., Google Maps); when the number of stops is high and repeated queries are required for multiple scenarios, the cost of frequently updating large-scale origin-destination matrices increases. Therefore, fully dynamic re-optimization at fine time resolutions becomes financially and computationally infeasible for many teams or small-scale deployments. 
+
+Finally, as the sample size increases, the routing problem and binary distance evaluations grow rapidly, complicating both optimization and data acquisition demands. Consequently, the results provided should be interpreted as a robust foundation under controlled assumptions, not a perfect replica of live operations.
 
 \subsection{Applicability of the project under real life situations}
-Despite the limitations, the proposed workflow can be applied effectively in real-life settings as a decision-support tool. In practice, rather than attempting to simulate “everything instantly,” companies typically adopt a hybrid strategy: routes are planned using the best available data (historical averages, time-of-day traffic profiles, or limited API calls), and then updated only when meaningful disruptions occur (e.g., major delays, reassignments, or new pickups).
+Despite current limitations, the proposed workflow can be effectively implemented as a decision support tool in real life: Companies typically plan routes using historical averages/hourly traffic profiles and limited API data rather than simulating everything instantly; they only update in cases of significant delays, reassignments, or new pickups. Realistic implementation of the method involves daily or shift-based batch planning and using paid map APIs only for targeted verification, model calibration, or updating high-uncertainty connections; thus, route quality is maintained while reducing dependence on expensive real-time queries. Organizations with cost constraints can switch to OpenStreetMap-based open routing tools instead of paid APIs, or develop internal travel time estimators from historical GPS tracks to achieve a more sustainable solution at the cost of some accuracy. Ultimately, the project is most suitable for scenarios focused on enhancing operational feasibility and route quality under budget constraints; it must be acknowledged that full real-time and fully accurate simulation is not always technically or financially rational.
 
-A realistic deployment path is to use the method in batch planning windows (e.g., daily or per-shift planning) and reserve paid map API calls for targeted use cases such as validating a subset of routes, calibrating travel-time models, or updating only the most uncertain arcs. This reduces the operational dependency on expensive real-time queries while still benefiting from improved routing decisions. Additionally, organizations with strict cost constraints can replace paid APIs with open routing engines (e.g., OpenStreetMap-based tools) or build internal travel-time estimators from historical GPS traces, trading some accuracy for sustainability.
-
-Overall, the project is most applicable where the goal is to improve routing quality and operational feasibility under budget constraints, while acknowledging that fully real-time, fully accurate simulation of all real-world conditions is neither technically trivial nor always cost-effective.
 \subsection{Health and Safety Issues}
 The proposed decision-support framework aims to directly impact the occupational health and public safety risks related to large-scale pickup and delivery operations. Traditional routing approaches are characterized by fragmented planning and static definitions of routes, which result in drivers' excessively long working hours, unsafe driving behaviors, and last-minute adjustments of the operations. Such conditions increase accident probability, driver fatigue, and exposure to physical strain during repeated loading and unloading activities.
 
@@ -742,11 +859,9 @@ From a broader public safety perspective, optimized routing reduces total vehicl
 \subsubsection{Relevant UNSDGs:}
 
 \begin{itemize}[leftmargin=1.5cm]
-    \item \textbf{SDG 3 -- Good Health and Well-Being:} Routing optimization is relevant to goal 3 through the occupational health pathway. Using the occupational health perspective, the study of the VRP when the number of workers is the constraint shows that overly long routes and the number of stops have been observed to have a strong positive relationship to the incidence of fatigue accidents and musculoskeletal injuries among drivers [10]. The goal of routing optimization here is to provide preventive health tools that promote health to the truckers.
+    \item \textbf{SDG 3 -- Good Health and Well-Being:} Routing optimization is relevant to goal 3 through the occupational health pathway. Using the occupational health perspective, the study of the VRP when the number of workers is the constraint shows that overly long routes and the number of stops have been observed to have a strong positive relationship to the incidence of fatigue accidents and musculoskeletal injuries among drivers [10].
 
-Regarding public health, the efficiency of the vehicle routes minimizes the overall vehicle kilometers traveled (VKT), thereby directly increasing the reduction of NOx, PM, and CO$2$ emissions. The Pollution Routing Problem (PRP) literature explains that a small reduction in the delivery mileage of the urban routes leads to a noticeable improvement in air quality as well as respiratory-related outcomes [8], thereby making optimized routing systems contribute to the attainment of SDG3.
-
-    \item \textbf{SDG 8 -- Decent Work and Economic Growth:} Decent work in logistics is tightly linked to \textbf{predictability, workload balance, and regulatory compliance}. Halvorsen-Weare and Savelsbergh~[10] show that ignoring labor constraints in routing leads to systematic overwork and informal overtime practices. By contrast, labor-aware VRP formulations protect workers’ rights by ensuring that productivity gains do not come at the cost of excessive working hours. This aligns directly with SDG~8.8, subtarget of SDG 8 which emphasizes safe and secure working environments.
+    \item \textbf{SDG 8 -- Decent Work and Economic Growth:} Decent work in logistics is tightly linked to predictability, workload balance, and regulatory compliance. Halvorsen-Weare and Savelsbergh~[10] show that ignoring labor constraints in routing leads to systematic overwork and informal overtime practices. 
 \end{itemize}
 
 \subsection{Legal Issues}
@@ -758,16 +873,11 @@ disputes, and reputational damage
 
 \subsubsection{Regulatory Constraints and Compliance Risk}
 
-Labor laws impose tough penalties for working hours, rest time, and intensity. Indeed, manual and experience-based routing can cause violations of labor laws because routes can look feasible but turn out to be over the limit when actual time and traffic conditions are considered. Simulation studies carried out by academics related to labor-constrained routing problems affirm that if these limits can be considered targets rather than hard constraints, frequent violations occur.
-
-Regulatory risks are addressed by incorporating labor regulations within the optimization model as hard feasibility constraints. UPS delivery drivers have a contractual limit of around 9.5 hours of work per day. However, the operation limit imposed by the model is more stringent and fixed at 8.5 hours. Routes that violate this constraint are mathematically infeasible and are impossible to find. Thus, what was hitherto an issue of post-operation compliance becomes a mechanism of ex-ante compliance.
-
+Labor laws impose severe penalties for working hours, rest periods, and work intensity; manual routing can lead to exceeding limits under actual time and traffic conditions, even if routes appear feasible at first. Simulation studies on labor-constrained routing also show that violations become more frequent when these limits are treated as “targets” rather than “hard constraints.” This risk is mitigated by embedding strict feasibility constraints into the optimization model of labor regulations: Although UPS drivers' contractual daily limit is approximately 9.5 hours, the model enforces a stricter fixed operational limit of 8.5 hours; routes exceeding this limit are mathematically deemed unfeasible and cannot be found, thus transforming the post-operation compliance issue into an pre-operation compliance mechanism.
 
 \subsubsection{Algorithmic Compliance by Design}
 
-An important legal benefit that may be derived from the proposed framework is the idea of “algorithmic compliance.” Rather than relying upon managerial judgment for remedying compliance issues after the routes have already been determined, the algorithm itself becomes part of the compliance system. As such, the company is much less vulnerable to complaints regarding labor laws, audits, and overtime issues.
-
-On the other hand, by manual routing, discrepancies in regulation may be resolved in a non-official, unpaid overtime manner, thus potentially leading to a latent legal risk. Enforcing compliance at the planning level will ensure, therefore, that the gain in efficiency in the operation will not result in a legal risk.
+A key legal benefit of the proposed framework is the “algorithmic compliance” approach: rather than attempting to resolve compliance issues at management discretion after routes are determined, the algorithm itself becomes part of the compliance system. This makes the company less vulnerable to labor law complaints, audits, and overtime disputes. In contrast, in manual routing, deviations caused by regulations can be covered up “in the field” with unofficial and unpaid overtime, creating a hidden accumulation of legal risk.
 
 \subsubsection{Data Protection and Regulatory Accountability}
 
@@ -782,22 +892,20 @@ Apart from labor regulations, routing algorithms involve confidential business d
     \item \textbf{SDG 16.6 -- Peace, Justice and Strong Institutions:}  
     Developing effective, accountable, and transparent institutional processes by implementing rule-based, auditable, and consistently enforceable routing decisions. The optimization framework functions as a governance mechanism that reduces discretionary decision-making and strengthens organizational compliance.
 
-    \item \textbf{SDG 16.3 -- Peace, Justice and Strong Institutions:}  
-    Promoting the rule of law through standardized and non-arbitrary enforcement of operational constraints. By ensuring that regulatory limits are applied consistently to all routes and drivers, the framework supports predictable compliance and reduces the risk of selective or informal rule application.
 \end{itemize}
 
 \subsection{Economical Issues and Constraints}
 \subsubsection{Cost structure and budget constraints}
 
-The economic reality of last-mile operations is dominated by \textbf{variable operating costs (OPEX)} and avoidable inefficiencies. The main cost drivers are: (i) total distance and travel time (fuel, maintenance, depreciation), (ii) labor cost and overtime exposure, (iii) fleet activation and rental costs when additional vehicles are used, and (iv) operational failure costs such as re-routing, missed service performance, and dispatcher rework.
+The economic reality of last-mile operations is dominated by variable operating costs OPEX and avoidable inefficiencies. The main cost drivers are: (i) total distance and travel time (fuel, maintenance, depreciation), (ii) labor cost and overtime exposure, (iii) fleet activation and rental costs when additional vehicles are used, and (iv) operational failure costs such as re-routing, missed service performance, and dispatcher rework.
 
 In this project, economic constraints are operationally enforced through vehicle activation penalties, distance/time penalties, and feasibility constraints that prevent infeasible plans from being ``fixed'' via overtime. Sustainable VRP literature shows that treating cost as the only objective can damage service equity and worker welfare; therefore, economic efficiency must be balanced with social feasibility constraints rather than optimized in isolation~\cite{Gouraji2025,Pilati2024}.
 
-A second, often ignored, budget constraint is the \textbf{planning window constraint}: the solution must be produced before the morning shift begins. Industrial case studies identify computational tractability and operational deployability as binding economic constraints, not technical preferences~\cite{HalvorsenWeare2014}. This creates an implicit budget on compute and decision latency.
+A second, often ignored, budget constraint is the planning window constraint: the solution must be produced before the morning shift begins. Industrial case studies identify computational tractability and operational deployability as binding economic constraints, not technical preferences~\cite{HalvorsenWeare2014}. This creates an implicit budget on compute and decision latency.
 
 \subsubsection{ROI and business case logic}
 
-The framework should be evaluated with a clear \textbf{ROI model} that separates implementation cost from operational savings.
+The framework should be evaluated with a clear ROI model that separates implementation cost from operational savings.
 
 \textbf{Typical cost items (investment + recurring):}
 \begin{itemize}[leftmargin=1.5cm]
@@ -818,7 +926,9 @@ Multi-objective sustainable routing studies show that mileage reduction can simu
 
 \subsubsection{Financial risk and sensitivity}
 
-ROI can collapse if (i) data quality issues inflate exception handling, (ii) compute time exceeds the morning window and forces manual fallback~\cite{HalvorsenWeare2014}, (iii) operational constraints tighten and require re-calibration, or (iv) efficiency gains induce higher demand, increasing total system load (rebound risk)~\cite{Shahin2025}. Therefore, the economic evaluation should include sensitivity analysis over fuel price, wage/overtime, demand surges, and solver runtime variance.
+ROI can collapse if (i) data quality issues inflate exception handling, (ii) compute time exceeds the morning window and forces manual fallback~\cite{HalvorsenWeare2014}, (iii) operational constraints tighten and require re-calibration, or (iv) efficiency gains induce higher demand, increasing total system load (rebound risk)~\cite{Shahin2025}. 
+
+Rebound risk means that increased efficiency can reduce costs and simplify operations, thereby increasing demand/operational volume and potentially offsetting part or all of the expected total savings (fuel, emissions, traffic load, etc.).Therefore, the economic evaluation should include sensitivity analysis over fuel price, wage/overtime, demand surges, and solver runtime variance.
 
 \subsubsection{Relevant UNSDGs}
 
@@ -852,23 +962,18 @@ In the short term, productivity increases, but in the long term, the risk of acc
 increases. Therefore, a sustainable route plan must take “human capacity” constraints seriously, such as upper limits on working hours, number of stops, and realistic service times.
 \end{itemize}
 
-\subsubsection{Rebound Effect}
-If efficiency reduces costs, order frequency may increase. Even if emissions per package decrease, total emissions may not decrease. This project alone does not solve this; however, designs such as full load and integrated pickup-delivery help limit the rebound effect.
-
 \subsubsection{Relevant UNSDGs}
 \begin{itemize}
-    \item \textbf{SDG 11.6:} Reducing the environmental impact per capita of cities (including air quality and waste management). Unnecessary VKT decreases with route optimization where local air pollution and traffic pressure decrease.\cite{UN2015}
+    \item \textbf{SDG 9.4:} Digital optimization is an operational improvement that aims to do more work with fewer resources. Digital optimization is an operational improvement that aims to do more work with fewer resources.\cite{UN2015}
     \item \textbf{SDG 11.2:} Safe, accessible, and sustainable transportation systems. Less unnecessary vehicle circulation and more predictable freight movement reduce the strain on urban mobility.\cite{UN2015}
     \item \textbf{SDG 12.2:} Sustainable management and efficient use of natural resources. Fuel, vehicle wear, and time waste are reduced; pickup–delivery integration increases resource efficiency.\cite{UN2015}
     \item \textbf{SDG 12.6:} Encourage companies to adopt and report on sustainable practices. The model is suitable for generating measurable KPIs (VKT, load factor, route stability, overtime, exception rate).\cite{UN2015}
     \item \textbf{SDG 13.2:} Integrate climate measures into policy/strategy and planning. Establishes a decision-making mechanism that reduces emissions at the planning level.\cite{UN2015}
-    \item \textbf{SDG 9.4:} Develop sustainable infrastructure and industrialization by increasing resource efficiency. Digital optimization is an operational improvement that aims to do more work with fewer resources. Digital optimization is an operational improvement that aims to do more work with fewer resources.\cite{UN2015}
-    \item \textbf{SDG 9.5:} Increase research and technological capacity. The MILP + metaheuristic/heuristic hybrid approach is a technology capacity that brings academic accuracy to the field.\cite{UN2015}
 \end{itemize}
 
 
 \subsection{Producibility-Manufacturability Issues}
-This project does not deliver a physical product; it delivers a \textbf{decision-support service} that must run reliably every day. Therefore, ``manufacturability'' should be interpreted as \textbf{service deliverability and operational deployability}, rather than physical producibility.
+This project does not deliver a physical product; it delivers a decision-support service that must run reliably every day. Therefore, ``manufacturability'' should be interpreted as service deliverability and operational deployability, rather than physical producibility.
 
 \subsubsection{Producibility as timely solution generation}
 
@@ -878,7 +983,6 @@ In real operations, a routing solution that is not produced before the shift sta
     \item keeping runtime predictable and controllable,
     \item generating acceptable-quality routes even for large instances.
 \end{itemize}
-Exact MILP formulations may be theoretically strong, but if they require hours for instances with 100+ stops, they fail operationally. This is why a hybrid approach (MILP for benchmarking and heuristics/metaheuristics for daily production) is not a preference but an operational necessity.
 
 \subsubsection{Manufacturability as deployability and sustainable operation}
 
@@ -889,7 +993,6 @@ For a service, the main challenge is not whether it runs once, but whether it ca
     \item logging and traceability to explain why a route was generated,
     \item maintainability and version control as demand patterns and constraints evolve.
 \end{itemize}
-In short, success is defined by repeatable, maintainable, and operationally sustainable execution.
 
 \subsubsection{ SLA and operational trust}
 
@@ -908,11 +1011,10 @@ In this project, route planning offers the opportunity to make these conditions 
 
 Route decisions are not solely about cost. They directly impact people's daily lives. Optimization focused solely on reducing costs naturally favors densely populated and easily accessible areas. This can lead to remote, scattered, or low-income neighborhoods receiving services later, and sometimes being systematically marginalized.~\cite{Bonku2024}.
 
-This situation is often not intentional. The algorithm simply chooses the cheapest route. But the result can still be unfair. Therefore, without corrective mechanisms, the route planning system can increase inequality. For example, rules must be established that require the service to reach every region at a certain minimum level, or a weighting system must be implemented that does not completely overlook disadvantaged areas. Otherwise, while the system may appear efficient, it invisibly makes access to the service more difficult for some people.
 \paragraph{Relevant UNSDGs}
 \begin{itemize}
-    \item \textbf{SDG 10.2 (Primary):} Strengthen the social and economic inclusion of all by 2030~\cite{UN2015}.
-    \item \textbf{SDG 10.3 (Secondary):} Reducing inequality in outcomes and ensuring equal opportunity~\cite{UN2015}.
+    \item \textbf{SDG 10.2:} Strengthen the social and economic inclusion of all by 2030~\cite{UN2015}.
+    \item \textbf{SDG 10.3:} Reducing inequality in outcomes and ensuring equal opportunity~\cite{UN2015}.
 \end{itemize}
 
 \subsubsection{Gender Equality}
@@ -927,26 +1029,52 @@ There is another limitation: we cannot solve SDG 5 with algorithms alone. Route 
 \end{itemize}
 
 \subsection{Environmental Issues}
-Route optimization has a direct impact on environmental performance because total vehicle-kilometers traveled (VKT) is strongly linked to fuel consumption and tailpipe emissions. By reducing unnecessary detours, repeated traversals, and inefficient stop sequences, optimized routes can lower CO\(_2\) emissions and local pollutants (e.g., NO\(_x\), particulate matter), particularly in dense urban areas where stop-and-go traffic is frequent. In addition, improved planning can reduce idling time and wasted engine-on time during delays, which further decreases emissions.
+Route optimization has a direct impact on environmental performance because total vehicle-kilometers traveled (VKT) is strongly linked to fuel consumption and tailpipe emissions. By reducing unnecessary detours, repeated traversals, and inefficient stop sequences, optimized routes can lower emissions and local pollutants, particularly in dense urban areas. In addition, improved planning can reduce idling time and wasted engine-on time during delays, which further decreases emissions.
 
 However, the environmental benefit is not guaranteed automatically. Real-world emissions depend on factors that are often abstracted away in routing models, such as vehicle type (diesel vs.\ electric), load-dependent fuel burn, road gradients, and time-dependent congestion. Therefore, our results can be interpreted as an environmentally favorable direction mainly through reduced travel distance and time, while a more accurate sustainability assessment would require integrating an emission model (e.g., speed-profile or fuel-rate based) and fleet characteristics.
+
+\paragraph{Relevant UNSDGs}
+\begin{itemize}
+    \item \textbf{SDG 11.6:} In line with the goal of reducing per capita environmental impact in cities, route optimization supports reducing VKT~\cite{UN2015}.
+    \item \textbf{SDG 13.2:} In line with the goal of integrating climate-related measures into policy and planning, routing decisions that reduce distance/time during the planning phase provide a concrete operational mechanism for reducing CO\(_2\) emissions ~\cite{UN2015}.
+\end{itemize}
 
 \subsection{Multidisciplinary Collaboration}
 This project required multidisciplinary collaboration because it sits at the intersection of operations research, data engineering, and practical logistics constraints. The routing model and constraints (capacity, stop limits, route length, feasibility) are rooted in optimization theory, while the dataset preparation demanded systematic data cleaning, preprocessing, and feature standardization (e.g., consistent stop identifiers, service types, and units). Moreover, operational realism required interpreting constraints in a way that reflects how a logistics system actually runs, not just how it looks mathematically.
 
 Coordination among team members was essential to keep the pipeline consistent end-to-end: defining problem scope, preparing inputs, validating outputs, generating KPIs/figures, and presenting results in a report-ready format. The final workflow is therefore not only an optimization solution, but also a reproducible process that aligns modeling assumptions, computational outputs, and reporting needs across different skill areas.
 
+
 % =========================
 % 7. Conclusions
 % =========================
+\newpage
 \section{CONCLUSIONS}
+This project introduced a decision support framework that generates daily, actionable route plans for UPS-like last-mile pickup–delivery operations. The framework's key contribution was not merely to write a “route-generating algorithm,” but to establish a repeatable planning pipeline that integrates the following steps into a single workflow: cleaning company data → creating daily instances → generating distance/time matrices with actual road metrics → generating route candidates → validating with KPIs. This allowed modeling assumptions, data reality, and operational constraints to converge in one place.
 
-The cluster-first, route-second approach successfully produced feasible, geographically coherent vehicle routes under realistic operational constraints for UPS’s last-mile delivery. 
-The pilot study demonstrated that even simple heuristics can achieve balanced stop distribution and route compactness while providing interpretable KPIs (total distance, duration, km/stop, min/stop). 
-Although the current version focuses on static clustering and greedy sequencing, it provides a reproducible framework that aligns closely with operational data pipelines and company constraints.
+When working with field data, the most obvious fact is this: solutions that look good in theory do not work in the field without taking into account “hard” limits such as capacity/working time/stop practicality. Therefore, the study made the constraints defining the plan's feasibility the “design inputs” from the outset: (i) capacity (Q=350) and the dynamic change in load throughout the tour when pickup and delivery are combined, (ii) the number of stops per route band (for operational practicality), (iii) shift duration (travel + service times), (iv) neighborhood/district logic for spatial realism, and (v) basic feasibility rules such as each stop being served only once and the route starting and ending at the depot. This framework focused on producing plans that could be read in operational language and monitored with KPIs, rather than plans that were “short on paper but would break down in the field.”
 
-Future optimization phases will rely on exact MILP models solved by Gurobi to refine route sequences, eliminate local inefficiencies, and quantify the optimality gap of the heuristic baseline. 
-The framework's modular structure allows easy integration of dynamic data (e.g., traffic conditions, time windows, and driver shift limits), making it a viable foundation for daily decision-support use.
+Monday's data contains 3,798 stops, and this scale demonstrates that the target is truly a “daily operation.” The composition of the data set is also critical: there is a workload of 3,102 deliveries, 696 pickups, and a total of 14,826 packages. These figures clarify why the method selection should be “scalable backbone + validation KPIs”: a fully optimal solution may not be practical for every instance every day; instead, a decisive, operational plan that enables rapid control is essential.
+
+Data analysis also revealed a site-specific problem in terms of capacity: On Monday, the number of packages for 9 stops exceeded 350. These stop “load peaks” can easily be overlooked in the classic VRP assumption; however, from a real-world operational perspective, they represent exceptions that may require additional business rules such as split-service, dedicated vehicles, or pre-assignment rules. This finding demonstrates that the model must be designed to be robust not only to average stop behavior but also to extreme values.
+
+The pilot conducted over the first 100 stops demonstrated that the framework works end-to-end and can generate KPIs: In this small instance divided into 5 clusters, direct operational metrics such as distance (km), time (min), km/stop, and min/stop were calculated for each cluster. The results clearly highlighted one point in particular:
+
+Cluster 2 contains only 5 stops but produces a total distance of 130.19 km; with km/stop = 26.04 and min/stop = 23.04, it is by far the most “scattered” and costly route.
+
+In contrast, dense clusters containing 17–30 stops (e.g., clusters 0, 1, 3) remain at similar levels in total distance, but their km/stop and min/stop values are much more compact.
+
+This is a critical implication for the field: even if you balance the number of stops, the “geographic load” (travel cost) may not be balanced. Therefore, planning must directly control not only “number of stops” but also geographic spread and travel load. Thus, the anomaly produced by the existing k-means-based (density-focused) clustering in the pilot is not an error; it is evidence that enhances the study's value: The system reveals a real constraint and blind spot.
+
+Using route metrics obtained via the Google Distance Matrix API instead of Euclidean distance made it possible to evaluate the outputs in “operational units” (km/min). This approach enhances the report's authenticity, as the decision language in operations like UPS is km and minutes.
+
+However, this comes at a cost, and the report acknowledges this accurately: due to API quota limitations, queries must be batch processed and cached; therefore, in pilot reporting, non-traffic durations were used as a basis, while traffic-inclusive durations were additionally reported for reference. This finding shows that the system's effort to “approach reality” also collides with engineering constraints (data acquisition cost, quota management). This is a critical design issue for field deployment: instead of deploying the entire matrix with live traffic every day, a hybrid strategy (generate the plan with stable data, perform paid verification on critical lines/sample routes, and update dynamically when necessary) is more realistic.
+
+The MIP side of the report extends the classic VRP template with UPS-specific constraints such as dynamic capacity (load increases and decreases when pickup and delivery occur simultaneously) and a stop count band. This is a methodologically correct formulation. However, an important fact that the report clearly states at this stage is that the model has not yet been computationally solved; therefore, MIP is not yet the “final optimal planner,” but rather a fundamental layer representing the decision logic the system aims for. This transparency strengthens the text because it clearly separates the output produced by the work today (heuristic-based pilot plan + KPI validation) and the next step (exact solution/optimality gap analysis with Gurobi).
+
+This project successfully framed and piloted a decision-support approach with a scaling target based on real data from the Asian side of Istanbul. Its strongest aspect is establishing a planning line that focuses on operational constraints rather than creating an “algorithm list” and concretizes the output in a route + KPI format. Pilot analyses clearly demonstrated two key facts: Density-focused simple clustering cannot always balance geographic cost and workload (we clearly observed the few stops–long route anomaly). Field data produces outliers (such as stops with Q>350), and a realistic system must incorporate these exceptions into the model either as a rule or as separate service logic.
+
+Therefore, this work did something far more valuable than “reinventing” the methods in the literature: it established a feasible planning backbone under the constraints, anomalies, and data acquisition costs revealed by real operational data, and made visible, with numerical evidence, which points require improvement. The improvements to be made in the next phase (constraint/assignment-based clustering, stronger cluster improvement, exact solution and gap measurement with MIP, traffic integration strategy) will be added on top of this backbone, directly increasing the system's field compatibility and quality level.
 
 
 % =========================
@@ -960,7 +1088,7 @@ In the following semester, the project will evolve from heuristic exploration to
 The next steps include:
 
 \begin{itemize}
-    \item Implementing and testing the full MILP formulation using Gurobi on clustered subproblems to achieve exact routing within each cluster.
+    \item Implementing and testing the full MIP formulation using Gurobi on clustered subproblems to achieve exact routing within each cluster.
     \item Integrating realistic traffic-adjusted travel times and dynamic load balancing.
     \item Performing comparative performance analysis between heuristic, metaheuristic, and exact solutions.
     \item Developing a user interface to visualize route outputs, KPIs, and operational alerts.
@@ -968,6 +1096,52 @@ The next steps include:
 \end{itemize}
 
 A final deliverable will combine the optimized model, route visualizations, and sensitivity analyses into a decision-support prototype usable by UPS operations planners.
+
+\subsection{Rolling Horizon VRP}
+The most critical design decision in rolling horizon optimization is how long decisions will be “locked” (e.g., the first X stops cannot be changed, while the rest can be revised) and the re-optimization period. DRT studies show that the performance of the rolling horizon setup (horizon length, update interval, pre-booking rate) is significantly affected  \cite{lu2023drt_rh,wangkopfer2015_rh_ctp}; similar sensitivity is expected in UPS-type distribution. Therefore, in the future, a “policy tuning” phase should be added that systematically tests different horizon/update combinations.
+
+The current report's daily planning focus can be maintained; however, if demand and load profiles change in the operation's weekly/monthly cycles, a multi-period planning approach provides a more accurate framework \cite{athanasopoulos2013_mpvrptw,dayarian2014_branchprice}. In multi-period VRP literature, periods are represented by clustering similar production/demand levels, and the plan's “inter-period feasibility” is also managed. In our context, this means that periods such as weekdays/weekends, campaign days, or seasonal peaks are handled with separate parameters, and the plan is designed with a “deviation tolerance” for these periods.
+
+The cost of exact methods increases rapidly on a large scale (many stops); nevertheless, exact-based methods are valuable for lower bound and quality comparisons in small/medium samples. In multi-period VRP, exact approaches such as branch-and-price have been shown to yield solvable results up to certain sizes \cite{athanasopoulos2013_mpvrptw,dayarian2014_branchprice}. Therefore, in the future, an exact (or exact-derived) “benchmark module” should be established for small samples, and the quality of the heuristic/rolling horizon solution used for large samples should be measured against this reference.
+
+In a rolling horizon dynamic structure, not only “algorithm selection” but also minor interventions added to the problem (e.g., vehicle under-occupancy penalties, capacity reduction assumptions) can affect overall performance. In multi-period dynamic distribution networks, it has been reported that interventions such as penalties that encourage vehicle usage or capacity/utilization-based regulations can reduce total travel time and the number of vehicles \cite{harmse2025_thesis}.
+
+In the rolling horizon + heuristic approach, generating different starting points for the same input reduces getting stuck in local minima. In VRP, random sequences, Monte Carlo-based trials, and different random number generators have been shown to affect solution quality \cite{FisherJaikumar1981,golden2008_vrp}. Therefore, in the future, controlled randomization (multiple runs, seed management) should be added to the solver module; “average performance” and “worst-case scenario” should be reported based on the obtained solution distribution. This significantly increases the methodological reliability of the report.
+
+\subsection{Multi-period VRP}
+Multi-period VRP (MPVRP) addresses routing decisions not as a single day/single plan, but across multiple periods (days/weeks/shifts). This perspective is more realistic, especially when demand and operational intensity vary across periods (weekdays–weekends, campaign days, seasonal effects). The fundamental challenge in MPVRP is not so much to optimize “that day's” route in each period, but rather to balance consistency across periods (vehicle and resource continuity, visit frequency targets, service levels) with total cost. Therefore, in the literature, MPVRP is mostly modeled with classic constraints such as time windows and capacity, along with binding decisions across periods; thus, the plan remains operationally feasible not just for a single period, but throughout the entire horizon.\cite{athanasopoulos2013_mpvrptw}
+
+The value of MPVRP for the follow-up work of this report lies in the following: When switching to a rolling horizon structure, the plan will already be updated periodically; the MPVRP framework ensures that these updates go beyond being merely “instant improvements” and serve multi-period objectives. For example, balancing visit frequencies in specific regions, distributing vehicle workloads more stably across periods, and addressing certain customer types (such as high-volume shippers) with period-based strategies can be more clearly defined using MPVRP logic. However, this expansion honestly comes at an additional cost: the problem size and decision space grow; therefore, while exact methods in the literature are generally limited in scale, decomposition approaches such as branch-and-price or well-designed heuristic/meta-heuristic frameworks come to the fore \cite{dayarian2014_branchprice,harmse2025_thesis}. In our context, the right approach is to generate an exact/decomposition-based benchmark on small samples and report the heuristic/rolling horizon solution for large scales using MPVRP metrics (total cost + inter-period stability)\cite{dayarian2014_branchprice}.
+
+\subsection{Fisher and Jaikumar Method For Cluster-first/Route Second Algorithm}
+The Fisher-Jaikumar method designs the “cluster-first, route-second” logic to focus on capacity and feasibility. In VRP, customer-vehicle assignment (which customer goes to which vehicle) and the order of visits within a vehicle (the order in which the route is followed) are normally two intertwined decisions; this method simplifies the problem structure by first strongly solving the assignment decision. The basic idea is this: Once the assignments are fixed, for each vehicle, only a “tour” problem (in practice, a TSP-type ordering problem) remains over the customers assigned to that vehicle. Therefore, the method produces good clusters/assignments first and then derives the route order for each cluster, rather than searching for the route directly as a whole; this is a clear engineering choice aimed at increasing applicability in large examples.\cite{FisherJaikumar1981}.
+
+The “cluster-first” part of the method is based on a generalized assignment problem, not a simple geographic clustering. First, a “seed” customer (initial representative point) is selected for each vehicle to define the depot-seed-depot skeleton. Then, each customer \(i\) to vehicle \(k\)assigned and its cost \(d_{ik}\) is calculated; This cost is structured to represent the marginal cost increase resulting from the customer's addition to the relevant seed-based skeleton. Then, \(\sum_{i}\sum_{k} d_{ik} y_{ik}\) The assignment model, which includes constraints such as purpose and capacity, is solved; thus, the resulting clusters are “capacity-respecting” from the outset and closer to the feasibility of the VRP. In the final stage, “route-second” comes into play: For each vehicle, a tour/sequencing heuristic is run on the assigned customer cluster to obtain the visit order. \cite{FisherJaikumar1981}.
+
+For the continuation of our report, the Fisher-Jaikumar method is a strong candidate for producing a “fast and constraint-sensitive initial solution,” especially at large scales. The most realistic development path is to use this approach as an initial/solution generation module and add more aggressive improvement steps (such as intra-route relocations, swaps, local search) on top of it; thus, both the initial feasibility is preserved and the final solution quality is improved. Furthermore, the method's own structure generates clear research questions for future studies: systematizing seed selection, \(d_{ik}\) The aim is to experimentally report the effect of iteratively updating costs to better align assignment costs with actual route costs and adding operational constraints outside of capacity (e.g., route duration/working hour limits) as secondary constraints to the assignment model on performance. \cite{FisherJaikumar1981}.
+
+
+\subsection{Updated Gantt Chart}
+In our previous work, we obtained operational data for the Asian side of Istanbul and prepared it for analysis; we clarified the problem definition according to UPS operational constraints (capacity, stop upper/lower limits, shift duration, and neighborhood/community logic) and began to establish and advance a basic MIP model framework that fits this framework. We also created the necessary narrative structure for progress reports and end-of-period reports on the reporting side and conducted initial trials with the Google Distance API for realistic calculation of distance/time metrics. The focus in the next phase will be to solve and validate the MIP model at a pilot scale using Gurobi, then strengthen constructive and corrective heuristics within the cluster-first route-second backbone to produce applicable results when the scale increases. simultaneously, the interface design for presenting the decision support framework to the user will be completed, and all findings will be converted into a final report and final presentation/poster output.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{Preparing Project Final Presentation or Poster.png}
+    \caption{Project timeline (Gantt view).}
+    \label{fig:project-timeline}
+\end{figure}
+\newpage
+\begin{itemize}
+    \item \textbf{10--21 November:} Retrieving data from UPS and cleaning it to make it ready for analysis.
+    \item \textbf{20--28 November:} Initiating the mathematical modeling study and preparing the progress report during the same period (24--28 November).
+    \item \textbf{1 December -- 2 January:} Model improvement/updating; Google Distance API trials during this period (27 December -- 2 January) and finishing the Final Report (31 December -- 4 January) 
+    \item \textbf{3--15 January:} Final Presentation.
+    \item \textbf{15 January -- 6 March:} Solving the mathematical model with Gurobi and making the necessary upgrades to the model.
+    \item \textbf{20 February -- 28 April:} Developing constructive and remedial insights for large scale (strengthening the cluster-first/route-second approach).
+    \item \textbf{24 April -- 26 May:} User interface design (presentation/application side of the decision support framework).
+    \item \textbf{21 May -- 19 June:} Project final report writing and submission preparation.
+    \item \textbf{1--19 June:} Final presentation/poster preparation and submission process (progressing in parallel with the final report).
+\end{itemize}
 
 
 % \begin{figure}[h]
@@ -991,18 +1165,16 @@ A final deliverable will combine the optimized model, route visualizations, and 
 % =========================
 \clearpage
 
-
 \appendix
 \thispagestyle{empty}
-\subsection{Appendix A, additional tables}
+\section{Appendix, additional tables}
 \input{assets/tables/tablerouteseqcluster0longtable.tex}
 \input{assets/tables/tableqtyoutliersmon.tex}
 \input{assets/tables/tablesample10distancekm.tex}
 
 \input{assets/tables/tablsample10durationtrafficmin.tex}
 \input{assets/tables/tablesample10durationmin.tex}
-\subsection{Appendix B, additional figures}
-
+\section{Appendix , additional figures}
 
 \begin{figure}[h]
 \centering
@@ -1017,4 +1189,5 @@ A final deliverable will combine the optimized model, route visualizations, and 
 \caption{Total duration (minutes) by cluster for the first 100 stops.}
 \label{fig:kpi_min_first100}
 \end{figure}
+
 \end{document}

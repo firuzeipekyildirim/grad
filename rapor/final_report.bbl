@@ -103,6 +103,45 @@ R.~Bonku, F.~Alkaabneh, and L.~B. Davis, ``Collaborative vehicle routing for
 {United Nations}, ``Transforming our world: the 2030 agenda for sustainable
   development,'' Online, 2015, accessed: 2025-11-30.
 
+\bibitem{KocLaporte2018}
+{\c{C}}.~Ko{\c{c}} and G.~Laporte, ``Vehicle routing with backhauls: Review and
+  research perspectives,'' \emph{Computers \& Operations Research}, 2018.
+
+\bibitem{KocBektaS2016}
+{\c{C}}.~Ko{\c{c}}, T.~Bekta{\c{s}}, and O.~Jabali, ``Thirty years of
+  heterogeneous vehicle routing,'' \emph{European Journal of Operational
+  Research}, 2016.
+
+\bibitem{PickupDeliveryReview2024}
+{V. Authors}, ``Pickup and delivery problems: A comprehensive review,''
+  \emph{European Journal of Operational Research}, vol. 313, no.~3, pp.
+  817--840, 2024.
+
+\bibitem{Jazemi2023}
+R.~Jazemi, E.~Alidadiani, K.~Ahn, and J.~Jang, ``A review of literature on
+  vehicle routing problems of last-mile delivery in urban areas,''
+  \emph{Applied Sciences}, vol.~13, no.~24, p. 13015, 2023.
+
+\bibitem{Shuaibu2025}
+A.~S. Shuaibu, A.~S. Mahmoud, and T.~R. Sheltami, ``A review of last-mile
+  delivery optimization: Strategies, technologies, drone integration, and
+  future trends,'' \emph{Drones}, vol.~9, no.~3, p. 158, 2025.
+
+\bibitem{Zhao2024}
+S.~Zhao, P.~Li, and Q.~Li, ``The vehicle routing problem considering customers'
+  multiple preferences in last-mile delivery,'' \emph{Tehni{\v{c}}ki Vjesnik},
+  vol.~31, no.~3, pp. 734--743, 2024.
+
+\bibitem{laporte1992vrp}
+G.~Laporte, ``The vehicle routing problem: An overview of exact and approximate
+  algorithms,'' \emph{European Journal of Operational Research}, vol.~59,
+  no.~3, pp. 345--358, 1992.
+
+\bibitem{min1989vrpspd}
+H.~Min, ``The multiple vehicle routing problem with simultaneous delivery and
+  pickup points,'' \emph{Transportation Research Part A}, vol.~23, no.~5, pp.
+  377--386, 1989.
+
 \bibitem{GoogleDistanceMatrixAPI}
 {Google Developers}, ``Distance matrix api documentation,'' Online, accessed:
   2026-01-04.
@@ -123,5 +162,36 @@ Y.~Shi, Y.~Lin, S.~Wang, H.~Wen, M.~K. Lim, and Y.~Li, ``A simultaneous
 P.~T.~K. Phung and S.~Olapiriyakul, ``Sustainable vehicle routing: Optimizing
   for gender equality,'' in \emph{Proceedings of the International Congress on
   Logistics and SCM Systems (ICLS)}, 2022.
+
+\bibitem{lu2023drt_rh}
+C.~Lu, M.~Maciejewski, H.~Wu, and K.~Nagel, ``Optimization of demand-responsive
+  transport: The rolling horizon approach,'' \emph{Procedia Computer Science},
+  vol. 220, pp. 145--153, 2023.
+
+\bibitem{wangkopfer2015_rh_ctp}
+X.~Wang and H.~Kopfer, ``Rolling horizon planning for a dynamic collaborative
+  routing problem with full-truckload pickup and delivery requests,''
+  \emph{Flexible Services and Manufacturing Journal}, vol.~27, pp. 509--533,
+  2015.
+
+\bibitem{athanasopoulos2013_mpvrptw}
+T.~Athanasopoulos and I.~Minis, ``Efficient techniques for the multi-period
+  vehicle routing problem with time windows within a branch and price
+  framework,'' \emph{Annals of Operations Research}, vol. 206, pp. 1--22, 2013.
+
+\bibitem{dayarian2014_branchprice}
+I.~Dayarian, T.~G. Crainic, M.~Gendreau, and W.~Rei, ``A branch-and-price
+  approach for a multi-period vehicle routing problem,'' \emph{Computers \&
+  Operations Research}, vol.~55, pp. 167--184, 2014.
+
+\bibitem{harmse2025_thesis}
+G.~Harmse, ``Heuristic and metaheuristic approaches to the multi-period vehicle
+  routing problem with time windows and rolling planning horizon,'' MCom Thesis
+  (Operations Research), Stellenbosch University, 12 2025.
+
+\bibitem{golden2008_vrp}
+B.~Golden, S.~Raghavan, and E.~Wasil, Eds., \emph{The Vehicle Routing Problem:
+  Latest Advances and New Challenges}.\hskip 1em plus 0.5em minus 0.4em\relax
+  Springer, 2008.
 
 \end{thebibliography}
